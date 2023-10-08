@@ -16,7 +16,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { DemoScreenProps } from '../types';
+import type { DemoScreenProps } from '../types';
 
 type SectionProps = PropsWithChildren<{ title: string }>;
 

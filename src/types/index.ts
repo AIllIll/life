@@ -1,12 +1,39 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
-type RootStackParamList = {
-    Home: { username?: string };
-    Demo: undefined;
+// tabs
+type TabsParamList = {
+    'tab-profile': { username: string };
+    'tab-home': undefined;
 };
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type ProfileTabProps = BottomTabScreenProps<TabsParamList, 'tab-profile'>;
+type HomeTabProps = BottomTabScreenProps<TabsParamList, 'tab-home'>;
 
-type DemoScreenProps = NativeStackScreenProps<RootStackParamList, 'Demo'>;
+// home tab stacks
+type HomeStackParamList = {
+    home: undefined;
+    demo: undefined;
+};
+type HomeScreenProps = NativeStackScreenProps<HomeStackParamList, 'home'>;
+type DemoScreenProps = NativeStackScreenProps<HomeStackParamList, 'demo'>;
 
-export type { RootStackParamList, HomeScreenProps, DemoScreenProps };
+// profile tab stacks
+type ProfileStackParamList = {
+    profile: { username: string };
+};
+type ProfileScreenProps = NativeStackScreenProps<
+    ProfileStackParamList,
+    'profile'
+>;
+
+export type {
+    TabsParamList,
+    HomeTabProps,
+    ProfileTabProps,
+    HomeStackParamList,
+    HomeScreenProps,
+    DemoScreenProps,
+    ProfileStackParamList,
+    ProfileScreenProps,
+};
