@@ -80,4 +80,21 @@ To learn more about React Native, take a look at the following resources:
 
 # App
 
-页面路由架构由 root 和 tabs 完成，具体的页面内容在 screens 中实现。
+## 项目结构
+
+-   root: app 根节点
+-   tabs: 页面路由架构
+-   screens: 具体的页面内容
+-   types: 类型文件
+
+## 页面结构
+
+-   home: 暂无内容，测试用
+
+    -   home: 默认页
+    -   demo: 测试 demo
+
+-   plan: 计划助手
+    -   plan: 默认页
+-   profile: 个人页面
+    -   profile: 默认页

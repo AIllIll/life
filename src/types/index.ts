@@ -3,12 +3,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 // tabs
 type TabsParamList = {
-    'tab-profile': { username: string };
-    'tab-home': undefined;
+    'profile-tab': { username: string };
+    'home-tab': undefined;
 };
 
-type ProfileTabProps = BottomTabScreenProps<TabsParamList, 'tab-profile'>;
-type HomeTabProps = BottomTabScreenProps<TabsParamList, 'tab-home'>;
+type ProfileTabProps = BottomTabScreenProps<TabsParamList, 'profile-tab'>;
+type HomeTabProps = BottomTabScreenProps<TabsParamList, 'home-tab'>;
 
 // home tab stacks
 type HomeStackParamList = {

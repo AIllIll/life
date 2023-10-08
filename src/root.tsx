@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeTab from './tabs/home-tab';
 import ProfileTab from './tabs/profile-tab';
 import type { TabsParamList } from './types';
-import { Text, View } from 'react-native';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
@@ -18,7 +17,7 @@ function Root(): JSX.Element {
                     // tabBarTitle: 1223,
                 })}>
                 <Tab.Screen
-                    name="tab-home"
+                    name="home-tab"
                     component={HomeTab}
                     options={{
                         title: 'Home',
@@ -27,7 +26,7 @@ function Root(): JSX.Element {
                     }}
                 />
                 <Tab.Screen
-                    name="tab-profile"
+                    name="profile-tab"
                     component={ProfileTab}
                     options={{ title: 'Profile', headerShown: false }}
                     initialParams={{ username: 'wyc' }}
