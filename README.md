@@ -98,3 +98,8 @@ To learn more about React Native, take a look at the following resources:
     -   plan: 默认页
 -   profile: 个人页面
     -   profile: 默认页
+
+## 组件选用
+
+-   日程：https://github.com/wix/react-native-calendars
+-   时间：https://momentjs.com/
