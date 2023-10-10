@@ -4,10 +4,10 @@ import BackgroundTimer from 'react-native-background-timer';
 import moment from 'moment';
 import { View, Button } from 'react-native';
 
-function BackgroundTimerScreen({
+const BackgroundTimerScreen = ({
     navigation,
     route,
-}: BackgroundTimerScreenProps): JSX.Element {
+}: BackgroundTimerScreenProps): JSX.Element => {
     const [timer1, setTimer1] = useState(0);
     const [timer2, setTimer2] = useState(0);
     return (
@@ -71,5 +71,5 @@ function BackgroundTimerScreen({
             />
         </View>
     );
-}
+};
 export default BackgroundTimerScreen;

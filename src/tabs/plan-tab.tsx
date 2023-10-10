@@ -5,11 +5,11 @@ import PlanScreen from '../screens/plan-screen';
 
 const PlanStack = createNativeStackNavigator<PlanStackParamList>();
 
-function PlanTab({ navigation, route }: PlanTabProps): JSX.Element {
+const PlanTab = ({ navigation, route }: PlanTabProps): JSX.Element => {
     return (
         <PlanStack.Navigator>
             <PlanStack.Screen name="plan" component={PlanScreen} />
         </PlanStack.Navigator>
     );
-}
+};
 export default PlanTab;

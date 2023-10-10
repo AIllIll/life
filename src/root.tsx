@@ -10,7 +10,7 @@ import FlashMessage from 'react-native-flash-message';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
-function Root(): JSX.Element {
+const Root = (): JSX.Element => {
     return (
         <View style={{ flex: 1 }}>
             <NavigationContainer>
@@ -50,6 +50,6 @@ function Root(): JSX.Element {
             {/* <--- here as the last component */}
         </View>
     );
-}
+};
 
 export default Root;

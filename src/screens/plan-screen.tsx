@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { PlanScreenProps } from '../types';
 import AgendaScreen from '../components/agenda';
-import BackgroundTimer from 'react-native-background-timer';
-import moment from 'moment';
-import { View, Button } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import { View } from 'react-native';
 
-function PlanScreen({ navigation, route }: PlanScreenProps): JSX.Element {
-    const [timer1, setTimer1] = useState(0);
-    const [timer2, setTimer2] = useState(0);
+const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     return (
         <View style={{ flex: 1 }}>
             <AgendaScreen />
         </View>
     );
-}
+};
 export default PlanScreen;

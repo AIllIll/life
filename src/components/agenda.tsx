@@ -7,7 +7,6 @@ import {
     AgendaSchedule,
 } from 'react-native-calendars';
 import testIDs from '../test/testIDs';
-import BackgroundTimer from 'react-native-background-timer';
 
 interface State {
     items?: AgendaSchedule;

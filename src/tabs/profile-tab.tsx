@@ -5,7 +5,7 @@ import ProfileScreen from '../screens/profile-screen';
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
 
-function ProfileTab({ navigation, route }: ProfileTabProps): JSX.Element {
+const ProfileTab = ({ navigation, route }: ProfileTabProps): JSX.Element => {
     return (
         <ProfileStack.Navigator>
             <ProfileStack.Screen
@@ -15,5 +15,5 @@ function ProfileTab({ navigation, route }: ProfileTabProps): JSX.Element {
             />
         </ProfileStack.Navigator>
     );
-}
+};
 export default ProfileTab;

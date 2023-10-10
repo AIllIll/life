@@ -2,7 +2,10 @@ import React from 'react';
 import { Button, Text, View } from 'react-native';
 import type { ProfileScreenProps } from '../types';
 
-function ProfileScreen({ navigation, route }: ProfileScreenProps): JSX.Element {
+const ProfileScreen = ({
+    navigation,
+    route,
+}: ProfileScreenProps): JSX.Element => {
     return (
         <View>
             <Text>{route.params.username}的主页</Text>
@@ -18,5 +21,5 @@ function ProfileScreen({ navigation, route }: ProfileScreenProps): JSX.Element {
             <Button title="Pop to top" onPress={() => navigation.popToTop()} />
         </View>
     );
-}
+};
 export default ProfileScreen;

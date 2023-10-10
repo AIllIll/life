@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import type { HomeScreenProps } from '../types';
 
-function HomeScreen({ navigation, route }: HomeScreenProps): JSX.Element {
+const HomeScreen = ({ navigation, route }: HomeScreenProps): JSX.Element => {
     return (
         <View>
             {/* <Text>{route.params.username}的主页</Text> */}
@@ -18,5 +18,5 @@ function HomeScreen({ navigation, route }: HomeScreenProps): JSX.Element {
             <Button title="Pop to top" onPress={() => navigation.popToTop()} />
         </View>
     );
-}
+};
 export default HomeScreen;

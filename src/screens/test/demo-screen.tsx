@@ -20,7 +20,7 @@ import type { DemoScreenProps } from '../../types';
 
 type SectionProps = PropsWithChildren<{ title: string }>;
 
-function Section({ children, title }: SectionProps): JSX.Element {
+const Section = ({ children, title }: SectionProps): JSX.Element => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
         <View style={styles.sectionContainer}>
@@ -45,9 +45,9 @@ function Section({ children, title }: SectionProps): JSX.Element {
             </Text>
         </View>
     );
-}
+};
 
-function Demo({ navigation, route }: DemoScreenProps): JSX.Element {
+const DemoScreen = ({ navigation, route }: DemoScreenProps): JSX.Element => {
     const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {
@@ -87,7 +87,7 @@ function Demo({ navigation, route }: DemoScreenProps): JSX.Element {
             </ScrollView>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     sectionContainer: {
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Demo;
+export default DemoScreen;
