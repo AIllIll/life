@@ -16,7 +16,8 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import type { DemoScreenProps } from '../../types';
+import type { HomeDrawerParamList } from '../../types';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
 type SectionProps = PropsWithChildren<{ title: string }>;
 
@@ -47,7 +48,10 @@ const Section = ({ children, title }: SectionProps): JSX.Element => {
     );
 };
 
-const DemoScreen = ({ navigation, route }: DemoScreenProps): JSX.Element => {
+const DemoScreen = ({
+    navigation,
+    route,
+}: DrawerScreenProps<HomeDrawerParamList, 'demo'>): JSX.Element => {
     const isDarkMode = useColorScheme() === 'dark';
 
     const backgroundStyle = {

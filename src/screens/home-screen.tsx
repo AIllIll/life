@@ -1,8 +1,12 @@
 import React from 'react';
 import { Button, View } from 'react-native';
-import type { HomeScreenProps } from '../types';
+import type { HomeDrawerParamList } from '../types';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
-const HomeScreen = ({ navigation, route }: HomeScreenProps): JSX.Element => {
+const HomeScreen = ({
+    navigation,
+    route,
+}: DrawerScreenProps<HomeDrawerParamList, 'home'>): JSX.Element => {
     return (
         <View>
             {/* <Text>{route.params.username}的主页</Text> */}
@@ -13,9 +17,12 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps): JSX.Element => {
             />
             <Button
                 title="Home Again"
-                onPress={() => navigation.push('home')}
+                onPress={() => navigation.navigate('home')}
             />
-            <Button title="Pop to top" onPress={() => navigation.popToTop()} />
+            <Button
+                title="open drawer"
+                onPress={() => navigation.openDrawer()}
+            />
         </View>
     );
 };

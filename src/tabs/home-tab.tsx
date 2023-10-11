@@ -1,22 +1,24 @@
 import React from 'react';
-import type { HomeStackParamList, HomeTabProps } from '../types';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeDrawerParamList, type HomeTabProps } from '../types';
 import HomeScreen from '../screens/home-screen';
 import DemoScreen from '../screens/test/demo-screen';
 import BackgroundTimerScreen from '../screens/test/background-timer-screen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import DrawerScreen from '../screens/test/drawer-screen';
 
-const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
     return (
-        <HomeStack.Navigator>
-            <HomeStack.Screen name="home" component={HomeScreen} />
-            <HomeStack.Screen name="demo" component={DemoScreen} />
-            <HomeStack.Screen
+        <Drawer.Navigator>
+            <Drawer.Screen name="home" component={HomeScreen} />
+            <Drawer.Screen name="demo" component={DemoScreen} />
+            <Drawer.Screen
                 name="background-timer"
                 component={BackgroundTimerScreen}
             />
-        </HomeStack.Navigator>
+            <Drawer.Screen name="drawer" component={DrawerScreen} />
+        </Drawer.Navigator>
     );
 };
 export default HomeTab;

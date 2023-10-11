@@ -1,6 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-
 // tabs
 type TabsParamList = {
     'profile-tab': { username: string };
@@ -12,18 +11,13 @@ type ProfileTabProps = BottomTabScreenProps<TabsParamList, 'profile-tab'>;
 type PlanTabProps = BottomTabScreenProps<TabsParamList, 'plan-tab'>;
 type HomeTabProps = BottomTabScreenProps<TabsParamList, 'home-tab'>;
 
-// home tab stacks
-type HomeStackParamList = {
+// home tab drawers
+type HomeDrawerParamList = {
     home: undefined;
     demo: undefined;
     'background-timer': undefined;
+    drawer: undefined;
 };
-type HomeScreenProps = NativeStackScreenProps<HomeStackParamList, 'home'>;
-type DemoScreenProps = NativeStackScreenProps<HomeStackParamList, 'demo'>;
-type BackgroundTimerScreenProps = NativeStackScreenProps<
-    HomeStackParamList,
-    'background-timer'
->;
 
 // plan tab stacks
 type PlanStackParamList = {
@@ -47,10 +41,7 @@ export type {
     PlanTabProps,
     ProfileTabProps,
     // Home
-    HomeStackParamList,
-    HomeScreenProps,
-    DemoScreenProps,
-    BackgroundTimerScreenProps,
+    HomeDrawerParamList,
     // Plan
     PlanStackParamList,
     PlanScreenProps,
