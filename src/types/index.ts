@@ -17,6 +17,7 @@ type HomeDrawerParamList = {
     demo: undefined;
     'background-timer': undefined;
     drawer: undefined;
+    alert: undefined;
 };
 
 // plan tab stacks
@@ -48,4 +49,5 @@ export type {
     // Profile
     ProfileStackParamList,
     ProfileScreenProps,
+    // common
 };
