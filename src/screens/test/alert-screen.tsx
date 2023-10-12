@@ -7,6 +7,8 @@ import {
     hideMessage,
     MessageType,
 } from 'react-native-flash-message';
+import BackgroundTimer from 'react-native-background-timer';
+import moment from 'moment';
 
 // 其实只有5种，none和default是一样的
 const msgTypeList: MessageType[] = [
@@ -22,6 +24,7 @@ const AlertScreen = ({
     navigation,
     route,
 }: DrawerScreenProps<HomeDrawerParamList, 'alert'>): JSX.Element => {
+    const [intervalId, setIntervalId] = useState<number>(0);
     const [msgTypeIdx, setMsgTypeIdx] = useState<number>(0);
     const showMsg = useCallback(
         (msgTypeIdxArg: number) => {
@@ -52,6 +55,25 @@ const AlertScreen = ({
                     hideMessage();
                 }}
                 title="hide alert"
+                color="#841584"
+            />
+            <Button
+                onPress={() => {
+                    BackgroundTimer.clearInterval(intervalId);
+                    setIntervalId(
+                        BackgroundTimer.setInterval(() => {
+                            showMessage({
+                                message: `timer`,
+                                description: `${moment().format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                )}`,
+                                type: 'info',
+                                hideOnPress: false,
+                            });
+                        }, 1000)
+                    );
+                }}
+                title="start timer"
                 color="#841584"
             />
         </View>
