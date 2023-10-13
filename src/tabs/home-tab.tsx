@@ -7,12 +7,13 @@ import BackgroundTimerScreen from '../screens/test/background-timer-screen';
 import DrawerScreen from '../screens/test/drawer-screen';
 import AlertScreen from '../screens/test/alert-screen';
 import NotificationScreen from '../screens/test/notification-screen';
+import LocalStorageScreen from '../screens/test/local-storage-screen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
     return (
-        <Drawer.Navigator initialRouteName="notification">
+        <Drawer.Navigator initialRouteName="local-storage">
             <Drawer.Screen name="home" component={HomeScreen} />
             <Drawer.Screen name="demo" component={DemoScreen} />
             <Drawer.Screen
@@ -22,6 +23,10 @@ const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
             <Drawer.Screen name="drawer" component={DrawerScreen} />
             <Drawer.Screen name="alert" component={AlertScreen} />
             <Drawer.Screen name="notification" component={NotificationScreen} />
+            <Drawer.Screen
+                name="local-storage"
+                component={LocalStorageScreen}
+            />
         </Drawer.Navigator>
     );
 };

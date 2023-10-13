@@ -19,6 +19,7 @@ type HomeDrawerParamList = {
     drawer: undefined;
     alert: undefined;
     notification: undefined;
+    'local-storage': undefined;
 };
 
 // plan tab stacks
