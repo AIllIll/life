@@ -18,6 +18,7 @@ type HomeDrawerParamList = {
     'background-timer': undefined;
     drawer: undefined;
     alert: undefined;
+    notification: undefined;
 };
 
 // plan tab stacks
