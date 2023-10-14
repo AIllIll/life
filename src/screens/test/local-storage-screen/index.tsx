@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, TextInput, View, Text } from 'react-native';
-import type { HomeDrawerParamList } from '../../../types';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import {
-    AsyncStorageKeys,
-    loadStorage,
-    saveStorage,
-} from '../../../storage/local';
+import { AsyncStorageKeys, loadStorage, saveStorage } from '@src/storage/local';
+import { HomeDrawerParamList } from '@src/types';
 
 const LocalStorageScreen = ({
     navigation,

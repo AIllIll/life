@@ -1,6 +1,6 @@
 import React from 'react';
-import type { PlanScreenProps } from '../types';
-import AgendaScreen from '../components/agenda';
+import type { PlanScreenProps } from '@src/types';
+import AgendaScreen from '@src/components/agenda';
 import { View } from 'react-native';
 
 const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {

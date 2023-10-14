@@ -16,7 +16,7 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import type { HomeDrawerParamList } from '../../types';
+import type { HomeDrawerParamList } from '@src/types';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 
 type SectionProps = PropsWithChildren<{ title: string }>;

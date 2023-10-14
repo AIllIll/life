@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeDrawerParamList } from '../../types';
+import { HomeDrawerParamList } from '@src/types';
 import { DrawerLayoutAndroid, Text } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { HomeDrawerParamList } from '../../../types';
 import { Button, View } from 'react-native';
 import notifee, {
     AndroidChannel,
@@ -12,7 +11,8 @@ import notifee, {
 } from '@notifee/react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import NotificationSounds from 'react-native-notification-sounds';
-import useAutoIncreasement from '../../../utils/auto-increasement';
+import { HomeDrawerParamList } from '@src/types';
+import useAutoIncreasement from '@src/utils/auto-increasement';
 
 const CHANNEL_ID = 'life-app';
 

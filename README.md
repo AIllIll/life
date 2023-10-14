@@ -103,3 +103,15 @@ To learn more about React Native, take a look at the following resources:
 
 -   日程：https://github.com/wix/react-native-calendars
 -   时间：https://momentjs.com/
+-   本地存储： https://github.com/react-native-async-storage/async-storage
+-   通知： https://notifee.app/react-native/docs/overview
+
+## 脚本
+
+-   自动创建 test-screen
+
+    > bash ./scripts/create-test-screen.sh
+
+## 插件
+
+-   绝对路径: https://www.yuque.com/willshichen/co8gpy/gcw7d7ng86e6gosg#h4Tq8

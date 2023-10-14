@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { HomeDrawerParamList } from '../../types';
+import { HomeDrawerParamList } from '@src/types';
 import { Button, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import {

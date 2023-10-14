@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import type { HomeDrawerParamList } from '../../types';
 import BackgroundTimer from 'react-native-background-timer';
 import moment from 'moment';
 import { View, Button } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import { HomeDrawerParamList } from '@src/types';
 
 const BackgroundTimerScreen = ({
     navigation,

@@ -6,7 +6,7 @@ import {
     AgendaEntry,
     AgendaSchedule,
 } from 'react-native-calendars';
-import testIDs from '../test/testIDs';
+import testIDs from '@src/test/testIDs';
 
 interface State {
     items?: AgendaSchedule;

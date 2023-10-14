@@ -2,11 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeTab from './tabs/home-tab';
-import ProfileTab from './tabs/profile-tab';
-import type { TabsParamList } from './types';
-import PlanTab from './tabs/plan-tab';
 import FlashMessage from 'react-native-flash-message';
+import type { TabsParamList } from './types';
+import HomeTab from '@src/tabs/home-tab';
+import ProfileTab from '@src/tabs/profile-tab';
+import PlanTab from '@src/tabs/plan-tab';
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 

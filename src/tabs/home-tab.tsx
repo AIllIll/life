@@ -1,13 +1,13 @@
 import React from 'react';
-import { HomeDrawerParamList, type HomeTabProps } from '../types';
+import { HomeDrawerParamList, type HomeTabProps } from '@src/types';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import HomeScreen from '../screens/home-screen';
-import DemoScreen from '../screens/test/demo-screen';
-import BackgroundTimerScreen from '../screens/test/background-timer-screen';
-import DrawerScreen from '../screens/test/drawer-screen';
-import AlertScreen from '../screens/test/alert-screen';
-import NotificationScreen from '../screens/test/notification-screen';
-import LocalStorageScreen from '../screens/test/local-storage-screen';
+import HomeScreen from '@src/screens/home-screen';
+import DemoScreen from '@src/screens/test/demo-screen';
+import BackgroundTimerScreen from '@src/screens/test/background-timer-screen';
+import DrawerScreen from '@src/screens/test/drawer-screen';
+import AlertScreen from '@src/screens/test/alert-screen';
+import NotificationScreen from '@src/screens/test/notification-screen';
+import LocalStorageScreen from '@src/screens/test/local-storage-screen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
