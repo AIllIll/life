@@ -17,7 +17,7 @@ camelName=$result
 
 
 # 修改types/index.tsx
-importLine="import ${camelName}Screen from './src/screens/test/${1}-screen';"
+importLine="import ${camelName}Screen from '@src/screens/test/${1}-screen';"
 awk -v "line=$importLine" '/^\s*$/ && !x {print line; x=1} 1' ./src/tabs/home-tab.tsx > temp_file && mv temp_file ./src/tabs/home-tab.tsx # awk似乎直接修改文件
 sed -i "/<Drawer.Navigator>/ a\            <Drawer.Screen name=\"$1\" component={${camelName}Screen} />" ./src/tabs/home-tab.tsx
 
@@ -30,7 +30,7 @@ sed -i "/type HomeDrawerParamList = {/ a\    '$1': undefined;" ./src/types/index
 mkdir ./src/screens/test/$1-screen
 touch ./src/screens/test/$1-screen/index.tsx
 echo -e "import React from 'react';\n\
-import { HomeDrawerParamList } from '../../../types';\n\
+import { HomeDrawerParamList } from '@src/types';\n\
 import { DrawerScreenProps } from '@react-navigation/drawer';\n\
 import { View } from 'react-native';\n\
 \n\
