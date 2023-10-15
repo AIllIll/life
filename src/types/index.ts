@@ -13,6 +13,8 @@ type HomeTabProps = BottomTabScreenProps<TabsParamList, 'home-tab'>;
 
 // home tab drawers
 type HomeDrawerParamList = {
+    'react-native-calendar': undefined;
+    'week-calendar': undefined;
     home: undefined;
     demo: undefined;
     'background-timer': undefined;

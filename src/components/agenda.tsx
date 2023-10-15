@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Alert, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import {
     Agenda,
@@ -40,39 +40,42 @@ const renderEmptyDate = () => {
 const rowHasChanged = (r1: AgendaEntry, r2: AgendaEntry) => {
     return r1.name !== r2.name;
 };
+
 const MyAgenda = ({}: AgendaProps): JSX.Element => {
     const [data, setData] = useState<AgendaSchedule>({});
-    const loadItems = useCallback(
+    const loadItemsForMonth = useCallback(
         (day: DateData) => {
+            console.log('loadItemsForMonth');
+            console.log(data);
             const items = data || {};
-            setTimeout(() => {
-                for (let i = -15; i < 85; i++) {
-                    const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                    const strTime = timeToString(time);
+            // setTimeout(() => {
+            //     for (let i = -15; i < 85; i++) {
+            //         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+            //         const strTime = timeToString(time);
 
-                    if (!items[strTime]) {
-                        items[strTime] = [];
+            //         if (!items[strTime]) {
+            //             items[strTime] = [];
 
-                        const numItems = Math.floor(Math.random() * 3 + 1);
-                        for (let j = 0; j < numItems; j++) {
-                            items[strTime].push({
-                                name: 'Item for ' + strTime + ' #' + j,
-                                height: Math.max(
-                                    50,
-                                    Math.floor(Math.random() * 150)
-                                ),
-                                day: strTime,
-                            });
-                        }
-                    }
-                }
+            //             const numItems = Math.floor(Math.random() * 3 + 1);
+            //             for (let j = 0; j < numItems; j++) {
+            //                 items[strTime].push({
+            //                     name: 'Item for ' + strTime + ' #' + j,
+            //                     height: Math.max(
+            //                         50,
+            //                         Math.floor(Math.random() * 150)
+            //                     ),
+            //                     day: strTime,
+            //                 });
+            //             }
+            //         }
+            //     }
 
-                const newItems: AgendaSchedule = {};
-                Object.keys(items).forEach(key => {
-                    newItems[key] = items[key];
-                });
-                setData(newItems);
-            }, 1000);
+            //     const newItems: AgendaSchedule = {};
+            //     Object.keys(items).forEach(key => {
+            //         newItems[key] = items[key];
+            //     });
+            //     setData(newItems);
+            // }, 1000);
         },
         [data]
     );
@@ -81,7 +84,7 @@ const MyAgenda = ({}: AgendaProps): JSX.Element => {
         <Agenda
             testID={testIDs.agenda.CONTAINER}
             items={data}
-            loadItemsForMonth={loadItems}
+            loadItemsForMonth={loadItemsForMonth}
             selected={moment().format('YYYY-MM-DD')}
             renderItem={renderItem}
             renderEmptyDate={renderEmptyDate}

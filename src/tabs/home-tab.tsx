@@ -8,12 +8,17 @@ import DrawerScreen from '@src/screens/test/drawer-screen';
 import AlertScreen from '@src/screens/test/alert-screen';
 import NotificationScreen from '@src/screens/test/notification-screen';
 import LocalStorageScreen from '@src/screens/test/local-storage-screen';
+import ReactNativeCalendarScreen from '@src/screens/test/react-native-calendar-screen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
     return (
-        <Drawer.Navigator initialRouteName="local-storage">
+        <Drawer.Navigator>
+            <Drawer.Screen
+                name="react-native-calendar"
+                component={ReactNativeCalendarScreen}
+            />
             <Drawer.Screen name="home" component={HomeScreen} />
             <Drawer.Screen name="demo" component={DemoScreen} />
             <Drawer.Screen

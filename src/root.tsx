@@ -15,7 +15,7 @@ const Root = (): JSX.Element => {
         <View style={{ flex: 1 }}>
             <NavigationContainer>
                 <Tab.Navigator
-                    initialRouteName="plan-tab"
+                    // initialRouteName="plan-tab"
                     screenOptions={({ route, navigation }) => ({
                         headerStyle: { backgroundColor: 'papayawhip' },
                         // tabBarTitle: 1223,
