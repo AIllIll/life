@@ -99,6 +99,10 @@ To learn more about React Native, take a look at the following resources:
 -   profile: 个人页面
     -   profile: 默认页
 
+## 数据结构
+
+-   采用 redux 进行全局状态管理
+
 ## 组件选用
 
 -   日程：https://github.com/wix/react-native-calendars

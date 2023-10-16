@@ -9,12 +9,14 @@ import AlertScreen from '@src/screens/test/alert-screen';
 import NotificationScreen from '@src/screens/test/notification-screen';
 import LocalStorageScreen from '@src/screens/test/local-storage-screen';
 import ReactNativeCalendarScreen from '@src/screens/test/react-native-calendar-screen';
+import ReduxScreen from '@src/screens/test/redux-screen';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
     return (
         <Drawer.Navigator>
+            <Drawer.Screen name="redux" component={ReduxScreen} />
             <Drawer.Screen
                 name="react-native-calendar"
                 component={ReactNativeCalendarScreen}
