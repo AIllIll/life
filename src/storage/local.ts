@@ -1,25 +1,35 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CallbackWithResult } from '@react-native-async-storage/async-storage/lib/typescript/types';
 
-enum AsyncStorageKeys {
+// all keys
+export enum AsyncStorageKeys {
     TEST = 'test',
     AGENDA = 'agenda',
 }
 
-const loadStorage = async (
+export const loadStorage = async (
     key: AsyncStorageKeys,
-    callback?: CallbackWithResult<string>
+    callback?: (res: string | null | undefined) => void
 ): Promise<string | null> => {
-    const item = await AsyncStorage.getItem(key, callback);
+    const item = await AsyncStorage.getItem(key, (err, res) => {
+        if (err) {
+            throw err;
+        } else {
+            callback && callback(res && JSON.parse(res));
+        }
+    });
     return item && JSON.parse(item);
 };
 
-const saveStorage = async (
+export const saveStorage = async (
     key: AsyncStorageKeys,
     item: any,
-    callback?: CallbackWithResult<string>
+    callback?: () => void
 ): Promise<void> => {
-    return await AsyncStorage.setItem(key, JSON.stringify(item), callback);
+    return await AsyncStorage.setItem(key, JSON.stringify(item), err => {
+        if (err) {
+            throw err;
+        } else {
+            callback && callback();
+        }
+    });
 };
-
-export { AsyncStorageKeys, loadStorage, saveStorage };

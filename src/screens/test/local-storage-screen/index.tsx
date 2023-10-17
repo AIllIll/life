@@ -15,6 +15,14 @@ const LocalStorageScreen = ({
         console.log(input);
     }, [input]);
 
+    // load storage when mounted
+    useEffect(() => {
+        loadStorage(AsyncStorageKeys.TEST, result => {
+            console.log(result);
+            setText(result || '');
+        });
+    }, []);
+
     return (
         <View>
             <TextInput onChangeText={v => setInput(v)} />
