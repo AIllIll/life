@@ -1,15 +1,17 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FlashMessage from 'react-native-flash-message';
-import type { TabsParamList } from './types';
+import { Provider } from 'react-redux';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import HomeTab from '@src/tabs/home-tab';
-import ProfileTab from '@src/tabs/profile-tab';
 import PlanTab from '@src/tabs/plan-tab';
+import ProfileTab from '@src/tabs/profile-tab';
+
 import store from './store';
 
+import type { TabsParamList } from './types';
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 const Root = (): JSX.Element => {

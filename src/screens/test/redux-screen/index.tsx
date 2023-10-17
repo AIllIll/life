@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { HomeDrawerParamList } from '@src/types';
+import { Button, FlatList, Text, TextInput, View } from 'react-native';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import { Button, TextInput, View } from 'react-native';
-import { setTestValue } from '@src/store';
-import { useAppDispatch } from '@src/hooks';
+import { useAppDispatch, useAppSelector } from '@src/hooks';
+import { RootState } from '@src/store';
+import {
+    fetchTodos,
+    saveTodos,
+    selectTodos,
+    todoAdded,
+} from '@src/store/slices/todos';
+
 import DeepComponent from './deep-component';
+
+import type { HomeDrawerParamList } from '@src/types';
 
 const ReduxScreen = ({
     navigation,
@@ -14,15 +23,35 @@ const ReduxScreen = ({
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        console.log(input);
+        console.log('input', input);
     }, [input]);
+
+    const status = useAppSelector((state: RootState) => state['todos'].status);
+    const todos = useAppSelector(state => {
+        return selectTodos(state);
+    });
+
+    useEffect(() => {
+        console.log('todos', todos);
+    }, [todos]);
 
     return (
         <View>
+            <Text>{status}</Text>
+            <FlatList
+                data={todos}
+                renderItem={({ item }) => <Text>{item.title}</Text>}
+                keyExtractor={({ id }) => id}
+            />
             <TextInput onChangeText={v => setInput(v)} />
+            <Button title="add" onPress={() => dispatch(todoAdded(input))} />
             <Button
-                title="save"
-                onPress={() => dispatch(setTestValue(input))}
+                title="fetch todos"
+                onPress={() => dispatch(fetchTodos())}
+            />
+            <Button
+                title="save todos"
+                onPress={() => dispatch(saveTodos(todos))}
             />
             <DeepComponent />
         </View>

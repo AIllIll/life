@@ -4,12 +4,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export enum AsyncStorageKeys {
     TEST = 'test',
     AGENDA = 'agenda',
+    TEST_REDUX = 'test-redux',
 }
 
 export const loadStorage = async (
     key: AsyncStorageKeys,
     callback?: (res: string | null | undefined) => void
-): Promise<string | null> => {
+): Promise<any> => {
     const item = await AsyncStorage.getItem(key, (err, res) => {
         if (err) {
             throw err;
@@ -25,11 +26,15 @@ export const saveStorage = async (
     item: any,
     callback?: () => void
 ): Promise<void> => {
-    return await AsyncStorage.setItem(key, JSON.stringify(item), err => {
-        if (err) {
-            throw err;
-        } else {
-            callback && callback();
-        }
-    });
+    try {
+        return await AsyncStorage.setItem(key, JSON.stringify(item), err => {
+            if (err) {
+                throw err;
+            } else {
+                callback && callback();
+            }
+        });
+    } catch (e) {
+        console.error(e);
+    }
 };
