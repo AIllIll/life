@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { Button, View } from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
@@ -65,7 +66,7 @@ const NotificationScreen = ({
     };
     const onCreateTriggerNotification = async (): Promise<void> => {
         const date = new Date(Date.now());
-        date.setSeconds(date.getSeconds() + 2);
+        date.setSeconds(date.getSeconds() + 5);
 
         // Create a time-based trigger
         const trigger: TimestampTrigger = {
@@ -76,8 +77,8 @@ const NotificationScreen = ({
         // Create a trigger notification
         await notifee.createTriggerNotification(
             {
-                title: 'Meeting with Jane',
-                body: 'Today at 11:20am',
+                title: 'trigger by time',
+                body: moment(date).format('YYYY-MM-DD HH:mm:ss'),
                 android: {
                     channelId: CHANNEL_ID,
                     sound: 'local.wav',
@@ -85,6 +86,18 @@ const NotificationScreen = ({
             },
             trigger
         );
+        const triggerId = await notifee.createTriggerNotification(
+            {
+                title: 'trigger by time (should be canceled)',
+                body: moment(date).format('YYYY-MM-DD HH:mm:ss'),
+                android: {
+                    channelId: CHANNEL_ID,
+                    sound: 'local.wav',
+                },
+            },
+            trigger
+        );
+        // await notifee.cancelTriggerNotification(triggerId);
     };
 
     return (
@@ -98,10 +111,10 @@ const NotificationScreen = ({
                 onPress={() =>
                     BackgroundTimer.setTimeout(
                         () => onPressShowNotification(),
-                        3000
+                        10000
                     )
                 }
-                title="show notification after 3 seconds"
+                title="show notification after 10 seconds"
             />
             <Button
                 onPress={onCreateTriggerNotification}
