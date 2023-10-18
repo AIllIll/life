@@ -1,11 +1,13 @@
 import React from 'react';
-import { HomeDrawerParamList } from '@src/types';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import ExpandableCalendarScreen from './example/src/screens/expandableCalendarScreen';
+import { HomeDrawerParamList } from '@src/types';
+
+import AgendaScreen from './example/src/screens/agendaScreen';
 import CalendarListScreen from './example/src/screens/calendarListScreen';
+import ExpandableCalendarScreen from './example/src/screens/expandableCalendarScreen';
 import PlaygroundScreen from './example/src/screens/playgroundScreen';
 import TimelineCalendarScreen from './example/src/screens/timelineCalendarScreen';
-import AgendaScreen from './example/src/screens/agendaScreen';
 
 const ReactNativeCalendarScreen = ({
     navigation,

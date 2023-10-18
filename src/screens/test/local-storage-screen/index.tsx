@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, TextInput, View, Text } from 'react-native';
+import { Button, Text, TextInput, View } from 'react-native';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { AsyncStorageKeys, loadStorage, saveStorage } from '@src/storage/local';
 import { HomeDrawerParamList } from '@src/types';

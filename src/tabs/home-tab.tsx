@@ -1,15 +1,16 @@
 import React from 'react';
-import { HomeDrawerParamList, type HomeTabProps } from '@src/types';
+
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from '@src/screens/home-screen';
-import DemoScreen from '@src/screens/test/demo-screen';
-import BackgroundTimerScreen from '@src/screens/test/background-timer-screen';
-import DrawerScreen from '@src/screens/test/drawer-screen';
 import AlertScreen from '@src/screens/test/alert-screen';
-import NotificationScreen from '@src/screens/test/notification-screen';
+import BackgroundTimerScreen from '@src/screens/test/background-timer-screen';
+import DemoScreen from '@src/screens/test/demo-screen';
+import DrawerScreen from '@src/screens/test/drawer-screen';
 import LocalStorageScreen from '@src/screens/test/local-storage-screen';
+import NotificationScreen from '@src/screens/test/notification-screen';
 import ReactNativeCalendarScreen from '@src/screens/test/react-native-calendar-screen';
 import ReduxScreen from '@src/screens/test/redux-screen';
+import { HomeDrawerParamList, HomeTabProps } from '@src/types';
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 

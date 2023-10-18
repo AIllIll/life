@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Text, View } from 'react-native';
+
 import type { ProfileScreenProps } from '@src/types';
 
 const ProfileScreen = ({

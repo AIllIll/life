@@ -37,7 +37,7 @@ const ReduxScreen = ({
 
     return (
         <View>
-            <Text>{status}</Text>
+            <DeepComponent />
             <FlatList
                 data={todos}
                 renderItem={({ item }) => <Text>{item.title}</Text>}
@@ -53,7 +53,6 @@ const ReduxScreen = ({
                 title="save todos"
                 onPress={() => dispatch(saveTodos(todos))}
             />
-            <DeepComponent />
         </View>
     );
 };

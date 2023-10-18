@@ -1,5 +1,4 @@
 import React from 'react';
-import type { PropsWithChildren } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -16,9 +15,11 @@ import {
     LearnMoreLinks,
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import type { HomeDrawerParamList } from '@src/types';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
 
+import type { PropsWithChildren } from 'react';
+import type { HomeDrawerParamList } from '@src/types';
 type SectionProps = PropsWithChildren<{ title: string }>;
 
 const Section = ({ children, title }: SectionProps): JSX.Element => {

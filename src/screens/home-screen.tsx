@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, View } from 'react-native';
-import type { HomeDrawerParamList } from '@src/types';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
 
+import type { HomeDrawerParamList } from '@src/types';
 const HomeScreen = ({
     navigation,
     route,

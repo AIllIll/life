@@ -1,7 +1,8 @@
 import React from 'react';
-import { HomeDrawerParamList } from '@src/types';
 import { DrawerLayoutAndroid, Text } from 'react-native';
+
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import { HomeDrawerParamList } from '@src/types';
 
 const DrawerScreen = ({
     navigation,

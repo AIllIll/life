@@ -1,5 +1,6 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
 // tabs
 type TabsParamList = {
     'profile-tab': { username: string };
@@ -13,7 +14,7 @@ type HomeTabProps = BottomTabScreenProps<TabsParamList, 'home-tab'>;
 
 // home tab drawers
 type HomeDrawerParamList = {
-    'redux': undefined;
+    redux: undefined;
     'react-native-calendar': undefined;
     'week-calendar': undefined;
     home: undefined;

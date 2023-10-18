@@ -1,14 +1,15 @@
+import moment from 'moment';
 import React, { useCallback, useState } from 'react';
-import { HomeDrawerParamList } from '@src/types';
 import { Button, View } from 'react-native';
-import { DrawerScreenProps } from '@react-navigation/drawer';
+import BackgroundTimer from 'react-native-background-timer';
 import {
-    showMessage,
     hideMessage,
     MessageType,
+    showMessage,
 } from 'react-native-flash-message';
-import BackgroundTimer from 'react-native-background-timer';
-import moment from 'moment';
+
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { HomeDrawerParamList } from '@src/types';
 
 // 其实只有5种，none和default是一样的
 const msgTypeList: MessageType[] = [

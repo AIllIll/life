@@ -1,5 +1,9 @@
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import groupBy from 'lodash/groupBy';
+import moment from 'moment';
 import React, { useCallback, useMemo, useState } from 'react';
-import type { PlanScreenProps } from '@src/types';
+import { Alert } from 'react-native';
 import {
     CalendarProvider,
     CalendarUtils,
@@ -8,16 +12,13 @@ import {
     TimelineList,
     TimelineProps,
 } from 'react-native-calendars';
-import moment from 'moment';
-import groupBy from 'lodash/groupBy';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
-import {
-    timelineEvents,
-    getDate,
-} from './test/react-native-calendar-screen/example/src/mocks/timelineEvents';
-import { Alert } from 'react-native';
 
+import {
+    getDate,
+    timelineEvents,
+} from './test/react-native-calendar-screen/example/src/mocks/timelineEvents';
+
+import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 const EVENTS: TimelineEventProps[] = timelineEvents;
 
