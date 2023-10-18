@@ -17,6 +17,7 @@ const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
     return (
         <Drawer.Navigator>
+            <Drawer.Screen name="notification" component={NotificationScreen} />
             <Drawer.Screen name="redux" component={ReduxScreen} />
             <Drawer.Screen
                 name="react-native-calendar"
@@ -30,7 +31,6 @@ const HomeTab = ({ navigation, route }: HomeTabProps): JSX.Element => {
             />
             <Drawer.Screen name="drawer" component={DrawerScreen} />
             <Drawer.Screen name="alert" component={AlertScreen} />
-            <Drawer.Screen name="notification" component={NotificationScreen} />
             <Drawer.Screen
                 name="local-storage"
                 component={LocalStorageScreen}

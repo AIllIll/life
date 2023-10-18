@@ -1,6 +1,15 @@
 import moment from 'moment';
-import React from 'react';
-import { Button, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+    Alert,
+    Button,
+    Modal,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 import BackgroundTimer from 'react-native-background-timer';
 import NotificationSounds from 'react-native-notification-sounds';
 
@@ -23,6 +32,11 @@ const NotificationScreen = ({
     route,
 }: DrawerScreenProps<HomeDrawerParamList, 'notification'>): JSX.Element => {
     const autoIncreasement = useAutoIncreasement(0);
+
+    const [delayInputModalVisible, setDelayInputModalVisible] =
+        useState<boolean>(false);
+    const [triggerDelay, setTriggerDelay] = useState<number>(10);
+
     const prepare = async (): Promise<string> => {
         const res = await notifee.requestPermission();
         console.log(res);
@@ -49,24 +63,12 @@ const NotificationScreen = ({
         };
         return await notifee.createChannel(channel);
     };
-    const onPressShowNotification = async (): Promise<string> => {
-        return await notifee.displayNotification({
-            title: 'Notification Title',
-            body: 'Main body content of the notification',
-            android: {
-                channelId: CHANNEL_ID,
-                smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
-                // pressAction is needed if you want the notification to open the app when pressed
-                pressAction: {
-                    id: 'default',
-                },
-                importance: AndroidImportance.HIGH,
-            },
-        });
-    };
-    const onCreateTriggerNotification = async (): Promise<void> => {
+
+    const onCreateTriggerNotification = async (
+        delay: number
+    ): Promise<void> => {
         const date = new Date(Date.now());
-        date.setSeconds(date.getSeconds() + 5);
+        date.setSeconds(date.getSeconds() + delay);
 
         // Create a time-based trigger
         const trigger: TimestampTrigger = {
@@ -86,17 +88,17 @@ const NotificationScreen = ({
             },
             trigger
         );
-        const triggerId = await notifee.createTriggerNotification(
-            {
-                title: 'trigger by time (should be canceled)',
-                body: moment(date).format('YYYY-MM-DD HH:mm:ss'),
-                android: {
-                    channelId: CHANNEL_ID,
-                    sound: 'local.wav',
-                },
-            },
-            trigger
-        );
+        // const triggerId = await notifee.createTriggerNotification(
+        //     {
+        //         title: 'trigger by time (should be canceled)',
+        //         body: moment(date).format('YYYY-MM-DD HH:mm:ss'),
+        //         android: {
+        //             channelId: CHANNEL_ID,
+        //             sound: 'local.wav',
+        //         },
+        //     },
+        //     trigger
+        // );
         // await notifee.cancelTriggerNotification(triggerId);
     };
 
@@ -104,20 +106,94 @@ const NotificationScreen = ({
         <View>
             <Button onPress={prepare} title="prepare" />
             <Button
-                onPress={onPressShowNotification}
+                onPress={async () =>
+                    await notifee.displayNotification({
+                        title: 'Notification Title',
+                        subtitle: 'Notification Subtitle',
+                        body: 'Main body content of the notification',
+                        android: {
+                            channelId: CHANNEL_ID,
+                            smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+                            // pressAction is needed if you want the notification to open the app when pressed
+                            pressAction: {
+                                id: 'default',
+                            },
+                            importance: AndroidImportance.HIGH,
+                        },
+                    })
+                }
                 title="show notification"
+            />
+            <Button
+                onPress={async () =>
+                    await notifee.displayNotification({
+                        title: 'Notification Title',
+                        subtitle: 'Notification Subtitle',
+                        body: 'Main body content of the notification',
+                        android: {
+                            channelId: CHANNEL_ID,
+                            smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+                            // pressAction is needed if you want the notification to open the app when pressed
+                            pressAction: {
+                                id: 'default',
+                            },
+                            importance: AndroidImportance.HIGH,
+                            // 通知上可以挂上时间
+                            timestamp: Date.now() - 480000, // 8 minutes ago
+                            showTimestamp: true, // 显示时间
+                        },
+                    })
+                }
+                title="show notification with time"
+            />
+            <Button
+                onPress={async () =>
+                    await notifee.displayNotification({
+                        title: 'Notification Title',
+                        subtitle: 'Notification Subtitle',
+                        body: 'Main body content of the notification',
+                        android: {
+                            channelId: CHANNEL_ID,
+                            smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+                            // pressAction is needed if you want the notification to open the app when pressed
+                            pressAction: {
+                                id: 'default',
+                            },
+                            importance: AndroidImportance.HIGH,
+                            // 通知上可以挂上倒计时
+                            timestamp: Date.now() + 480000, // 8 minutes later
+                            showChronometer: true, // 显示倒计时
+                            chronometerDirection: 'down',
+                        },
+                    })
+                }
+                title="show notification with countdown"
             />
             <Button
                 onPress={() =>
                     BackgroundTimer.setTimeout(
-                        () => onPressShowNotification(),
+                        async () =>
+                            await notifee.displayNotification({
+                                title: 'Notification Title',
+                                subtitle: 'Notification Subtitle',
+                                body: 'Main body content of the notification',
+                                android: {
+                                    channelId: CHANNEL_ID,
+                                    smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
+                                    // pressAction is needed if you want the notification to open the app when pressed
+                                    pressAction: {
+                                        id: 'default',
+                                    },
+                                    importance: AndroidImportance.HIGH,
+                                },
+                            }),
                         10000
                     )
                 }
                 title="show notification after 10 seconds"
             />
             <Button
-                onPress={onCreateTriggerNotification}
+                onPress={() => setDelayInputModalVisible(true)}
                 title="trigger notification by time"
             />
             <Button
@@ -132,13 +208,101 @@ const NotificationScreen = ({
             />
             <Button
                 title="cancel all notifications"
+                color={'red'}
                 onPress={() => notifee.cancelAllNotifications()}
             />
             <Button
                 title="openNotificationSettings"
                 onPress={() => notifee.openNotificationSettings()}
             />
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={delayInputModalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setDelayInputModalVisible(!delayInputModalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <Pressable
+                            style={[styles.button, styles.buttonClose]}
+                            onPress={() =>
+                                setDelayInputModalVisible(
+                                    !delayInputModalVisible
+                                )
+                            }>
+                            <Text style={styles.textStyle}>Hide Modal</Text>
+                        </Pressable>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="trigger delay"
+                            onChangeText={text => setTriggerDelay(Number(text))}
+                            keyboardType="numeric"
+                        />
+                        <Button
+                            title="comfirm"
+                            onPress={() =>
+                                onCreateTriggerNotification(triggerDelay)
+                            }
+                        />
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        width: '80%',
+        display: 'flex',
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    input: {
+        borderStyle: 'dashed',
+        borderWidth: 1,
+        width: '100%',
+    },
+});
 export default NotificationScreen;
