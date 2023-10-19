@@ -18,7 +18,7 @@ const LocalStorageScreen = ({
 
     // load storage when mounted
     useEffect(() => {
-        loadStorage(AsyncStorageKeys.TEST, result => {
+        loadStorage([AsyncStorageKeys.TEST], result => {
             console.log(result);
             setText(result || '');
         });
@@ -30,13 +30,13 @@ const LocalStorageScreen = ({
             <Button
                 title="save"
                 onPress={async () =>
-                    await saveStorage(AsyncStorageKeys.TEST, input)
+                    await saveStorage([AsyncStorageKeys.TEST], input)
                 }
             />
             <Button
                 title="load"
                 onPress={async () =>
-                    setText((await loadStorage(AsyncStorageKeys.TEST)) || '')
+                    setText((await loadStorage([AsyncStorageKeys.TEST])) || '')
                 }
             />
             <Text>{text}</Text>

@@ -1,4 +1,5 @@
-import React from 'react';
+import moment from 'moment';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import { Provider } from 'react-redux';
@@ -20,7 +21,7 @@ const Root = (): JSX.Element => {
             <View style={{ flex: 1 }}>
                 <NavigationContainer>
                     <Tab.Navigator
-                        // initialRouteName="plan-tab"
+                        initialRouteName="plan-tab"
                         screenOptions={({ route, navigation }) => ({
                             headerStyle: { backgroundColor: 'papayawhip' },
                             // tabBarTitle: 1223,

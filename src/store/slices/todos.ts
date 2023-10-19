@@ -6,18 +6,11 @@ import {
     nanoid,
 } from '@reduxjs/toolkit';
 import { AsyncStorageKeys, loadStorage, saveStorage } from '@src/storage/local';
+import { Todo } from '@src/types/entities';
 
 import { RootState } from '../';
 
 import type { EntityState, PayloadAction } from '@reduxjs/toolkit';
-/**
- * the entity interface of Todo
- */
-export interface Todo {
-    id: string;
-    title: string;
-    completed: boolean;
-}
 
 /**
  * the interface of TodosState
@@ -26,11 +19,17 @@ export interface TodosState extends EntityState<Todo> {
     status: string;
 }
 
+/**
+ * Adapter
+ */
 const todosAdapter = createEntityAdapter<Todo>({
     selectId: todo => todo.id,
     sortComparer: (a, b) => a.title.localeCompare(b.title),
 });
 
+/**
+ * Slice
+ */
 const todosSlice = createSlice({
     name: 'todos',
     initialState: todosAdapter.getInitialState({
@@ -97,11 +96,14 @@ const todosSlice = createSlice({
     },
 });
 
+/**
+ * Thunks Actions
+ */
 export const fetchTodos = createAsyncThunk(
     'todos/fetchTodos',
     async (): Promise<Todo[]> => {
         // replace with your own async data fetching code
-        const response = await loadStorage(AsyncStorageKeys.TEST_REDUX);
+        const response = await loadStorage([AsyncStorageKeys.TEST, 'todos']);
         return response || [];
     }
 );
@@ -110,16 +112,24 @@ export const saveTodos = createAsyncThunk(
     'todos/saveNewTodo',
     async (todosToSave: Todo[]) => {
         console.log('todosToSave', todosToSave);
-        return await saveStorage(AsyncStorageKeys.TEST_REDUX, todosToSave);
+        return await saveStorage([AsyncStorageKeys.TEST, 'todos'], todosToSave);
     }
 );
 
+/**
+ * Redux Actions
+ */
 export const { todoAdded, todoDeleted, todoToggled, todosLoading } =
     todosSlice.actions;
 
+/**
+ * Reducer
+ */
 export const todosReducer = todosSlice.reducer;
 
 /**
+ * Selectors
+ * 
  * adapter自带的两个selector
  * 一共有五个：
  * export interface EntitySelectors<T, V> {
@@ -143,4 +153,11 @@ export const selectTodoIds = createSelector(
     // Then, an "output selector" that receives all the input results as arguments
     // and returns a final result value
     todos => todos.map(todo => todo.id)
+);
+/**
+ * using an argument
+ */
+export const selectTodoByArgs = createSelector(
+    [selectTodos, (_, args) => args],
+    (items, args) => items.filter(item => item.id == args)
 );

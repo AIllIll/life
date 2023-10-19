@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import PlanScreen from '@src/screens/plan-screen';
+import PlanScreen from '@src/screens/plan';
 
 import type { PlanStackParamList, PlanTabProps } from '@src/types';
 const PlanStack = createNativeStackNavigator<PlanStackParamList>();

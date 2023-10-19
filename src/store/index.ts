@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import { agendasReducer } from './slices/agendas';
 import { todosReducer } from './slices/todos';
 
 const store = configureStore({
     reducer: {
         todos: todosReducer,
+        agendas: agendasReducer,
     },
 });
 
