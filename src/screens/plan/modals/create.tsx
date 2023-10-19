@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, View } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import {
+    Alert,
+    Button,
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 
 export const useAgendaCreateModal = (): [
     React.Dispatch<React.SetStateAction<boolean>>,
     JSX.Element
 ] => {
     const [visible, setVisible] = useState(false);
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            firstName: '',
+            lastName: '',
+        },
+    });
+    const onSubmit = data => console.log(data);
     return [
         setVisible,
         <Modal
@@ -20,7 +40,40 @@ export const useAgendaCreateModal = (): [
                 <View
                 // style={styles.modalView}
                 >
-                    <Text>this is a modal</Text>
+                    <Controller
+                        control={control}
+                        rules={{
+                            required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput
+                                placeholder="First name"
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
+                        name="firstName"
+                    />
+                    {errors.firstName && <Text>This is required.</Text>}
+
+                    <Controller
+                        control={control}
+                        rules={{
+                            maxLength: 100,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput
+                                placeholder="Last name"
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                            />
+                        )}
+                        name="lastName"
+                    />
+
+                    <Button title="Submit" onPress={handleSubmit(onSubmit)} />
                 </View>
             </View>
         </Modal>,
