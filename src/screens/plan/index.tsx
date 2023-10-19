@@ -4,7 +4,7 @@ import find from 'lodash/find';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, View } from 'react-native';
 import {
     CalendarProvider,
     CalendarUtils,
@@ -19,6 +19,7 @@ import { selectAgendaDates, selectAgendas } from '@src/store/slices/agendas';
 import { AgendaEvent } from '@src/types/entities';
 
 import { getTime } from './helper';
+import { useAgendaCreateModal } from './modals/create';
 
 import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -84,6 +85,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             console.log('onBackgroundLongPress');
             console.log('timeString', timeString);
             console.log('timeObject', timeObject);
+            setCreateModalVisible(true);
             // const hourString = `${(timeObject.hour + 1)
             //     .toString()
             //     .padStart(2, '0')}`;
@@ -157,43 +159,47 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             // ]);
         }, []);
 
+    const [setCreateModalVisible, createModal] = useAgendaCreateModal();
     return (
-        <CalendarProvider
-            date={currentDate}
-            onDateChanged={onDateChanged}
-            onMonthChange={onMonthChange}
-            showTodayButton
-            disabledOpacity={0.6}
-            // numberOfDays={3}
-        >
-            <ExpandableCalendar
-                firstDay={1}
-                // leftArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/previous.png')}
-                // rightArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/next.png')}
-                markedDates={marked}
-            />
-            <TimelineList
-                events={eventsByDate}
-                timelineProps={{
-                    format24h: true,
-                    onBackgroundLongPress,
-                    onBackgroundLongPressOut,
-                    // scrollToFirst: true,
-                    // start: 0,
-                    // end: 24,
-                    unavailableHours: [
-                        // { start: 0, end: 6 },
-                        // { start: 22, end: 24 },
-                    ],
-                    overlapEventsSpacing: 8,
-                    rightEdgeSpacing: 24,
-                }}
-                showNowIndicator
-                scrollToNow
-                scrollToFirst
-                initialTime={INITIAL_TIME}
-            />
-        </CalendarProvider>
+        <View style={{ flex: 1 }}>
+            {createModal}
+            <CalendarProvider
+                date={currentDate}
+                onDateChanged={onDateChanged}
+                onMonthChange={onMonthChange}
+                showTodayButton
+                disabledOpacity={0.6}
+                // numberOfDays={3}
+            >
+                <ExpandableCalendar
+                    firstDay={1}
+                    // leftArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/previous.png')}
+                    // rightArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/next.png')}
+                    markedDates={marked}
+                />
+                <TimelineList
+                    events={eventsByDate}
+                    timelineProps={{
+                        format24h: true,
+                        onBackgroundLongPress,
+                        onBackgroundLongPressOut,
+                        // scrollToFirst: true,
+                        // start: 0,
+                        // end: 24,
+                        unavailableHours: [
+                            // { start: 0, end: 6 },
+                            // { start: 22, end: 24 },
+                        ],
+                        overlapEventsSpacing: 8,
+                        rightEdgeSpacing: 24,
+                    }}
+                    showNowIndicator
+                    scrollToNow
+                    scrollToFirst
+                    initialTime={INITIAL_TIME}
+                />
+            </CalendarProvider>
+        </View>
     );
 };
 
