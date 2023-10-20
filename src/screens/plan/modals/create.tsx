@@ -1,21 +1,34 @@
-import moment from 'moment';
-import React, { useState } from 'react';
+import moment, { Moment } from 'moment';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import DateRangePicker from '@src/components/date-range-picker';
-import FullScreenModal from '@src/components/full-screen-modal';
+import FullScreenModal, {
+    FullScreenModalProps,
+} from '@src/components/full-screen-modal';
 import { useAppDispatch } from '@src/hooks';
 import { createOne } from '@src/store/slices/agendas';
 import { AgendaCreateFormData } from '@src/types/entities';
 
-export const useAgendaCreateModal = (): [
-    React.Dispatch<React.SetStateAction<boolean>>,
-    JSX.Element
-] => {
+export interface AgendaCreateModalExtraProps {
+    visible: boolean;
+    onClose: Function;
+    newAgendaStartTimeString: Moment;
+}
+export type AgendaCreateModalProps = AgendaCreateModalExtraProps &
+    FullScreenModalProps;
+
+const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
+    visible,
+    onClose,
+    newAgendaStartTimeString,
+}) => {
     const dispatch = useAppDispatch();
 
-    const [visible, setVisible] = useState(false);
+    // const [newAgendaStartTimeString, setNewAgendaStartTimeString] = useState(
+    //     moment()
+    // );
     const {
         control,
         handleSubmit,
@@ -24,27 +37,26 @@ export const useAgendaCreateModal = (): [
         defaultValues: {
             title: '',
             summary: '',
-            timeRange: [+moment(), +moment().add(10, 'minute')],
+            timeRange: [
+                +moment(newAgendaStartTimeString),
+                +moment(newAgendaStartTimeString).add(60, 'minute'),
+            ],
             memo: '',
         },
     });
-    const onCancel = () => {
-        setVisible(false);
-    };
     const onSave = (data: AgendaCreateFormData) => {
         console.log('data', data);
         const agenda = {
             ...data,
             completed: false,
         };
-        dispatch(createOne(agenda)).then(() => setVisible(false));
+        dispatch(createOne(agenda)).then(() => onClose());
     };
 
-    return [
-        setVisible,
+    return (
         <FullScreenModal
             leftButtonProps={{
-                onPress: onCancel,
+                onPress: () => onClose(),
                 text: 'cancel',
             }}
             rightButtonProps={{
@@ -52,10 +64,7 @@ export const useAgendaCreateModal = (): [
                 text: ' save ',
             }}
             visible={visible}
-            onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setVisible(!visible);
-            }}>
+            onRequestClose={() => onClose()}>
             <Controller
                 control={control}
                 name="title"
@@ -137,9 +146,11 @@ export const useAgendaCreateModal = (): [
                     />
                 )}
             />
-        </FullScreenModal>,
-    ];
+        </FullScreenModal>
+    );
 };
+
+export default AgendaCreateModal;
 
 const styles = StyleSheet.create({
     formItem: {

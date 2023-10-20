@@ -19,7 +19,7 @@ import {
 } from '@src/store/slices/agendas';
 
 import { getCalendarDateString, getTime } from './helper';
-import { useAgendaCreateModal } from './modals/create';
+import AgendaCreateModal from './modals/create';
 
 import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -60,20 +60,19 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         );
     }, [agendas]);
 
+    // 获取所有日程
     useEffect(() => {
         dispatch(fetchAll());
     }, []);
+
+    const [newAgendaStartTimeString, setNewAgendaStartTimeString] = useState(
+        moment()
+    );
+
+    const [createModalVisible, setCreateModalVisible] = useState(false);
+
+    // logs
     useEffect(() => {
-        // const m = moment();
-        // console.log('m', m);
-        // console.log(CalendarUtils.getCalendarDateString(+m));
-        // m.add(-1, 'h');
-        // console.log('m', m);
-        // console.log(
-        //     CalendarUtils.getCalendarDateString(
-        //         +m.add(moment().utcOffset(), 'minute')
-        //     )
-        // );
         console.log('marked', marked);
     }, [marked]);
 
@@ -86,7 +85,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         setCurrentDate(date);
     };
 
-    const onMonthChange = () => (month: any, updateSource: any) => {
+    const onMonthChange = (month: any, updateSource: any) => {
         console.log(
             'TimelineCalendarScreen onMonthChange: ',
             month,
@@ -99,34 +98,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             console.log('onBackgroundLongPress');
             console.log('timeString', timeString);
             console.log('timeObject', timeObject);
-            setCreateModalVisible(true);
-            // const hourString = `${(timeObject.hour + 1)
-            //     .toString()
-            //     .padStart(2, '0')}`;
-            // const minutesString = `${timeObject.minutes
-            //     .toString()
-            //     .padStart(2, '0')}`;
-
-            // const newEvent: AgendaEvent = {
-            //     id: 'draft',
-            //     startDate: `${timeString}`,
-            //     end: `${timeObject.date} ${hourString}:${minutesString}:00`,
-            //     title: 'New Event',
-            //     color: 'white',
-            // };
-
-            // if (timeObject.date) {
-            //     if (eventsByDate[timeObject.date]) {
-            //         eventsByDate[timeObject.date] = [
-            //             ...eventsByDate[timeObject.date],
-            //             newEvent,
-            //         ];
-            //         setEventsByDate(eventsByDate);
-            //     } else {
-            //         eventsByDate[timeObject.date] = [newEvent];
-            //         setEventsByDate(eventsByDate);
-            //     }
-            // }
+            setNewAgendaStartTimeString(moment(timeString));
         }, []);
 
     const onBackgroundLongPressOut: TimelineProps['onBackgroundLongPressOut'] =
@@ -134,49 +106,18 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             console.log('onBackgroundLongPressOut');
             console.log('timeString', timeString);
             console.log('timeObject', timeObject);
-            // Alert.prompt('New Event', 'Enter event title', [
-            //     {
-            //         text: 'Cancel',
-            //         onPress: () => {
-            //             if (timeObject.date) {
-            //                 eventsByDate[timeObject.date] = filter(
-            //                     eventsByDate[timeObject.date],
-            //                     e => e.id !== 'draft'
-            //                 );
-            //                 setEventsByDate(eventsByDate);
-            //             }
-            //         },
-            //     },
-            //     {
-            //         text: 'Create',
-            //         onPress: eventTitle => {
-            //             if (timeObject.date) {
-            //                 const draftEvent = find(
-            //                     eventsByDate[timeObject.date],
-            //                     {
-            //                         id: 'draft',
-            //                     }
-            //                 );
-            //                 if (draftEvent) {
-            //                     draftEvent.id = undefined;
-            //                     draftEvent.title =
-            //                         eventTitle ?? 'New Event';
-            //                     draftEvent.color = 'lightgreen';
-            //                     eventsByDate[timeObject.date] = [
-            //                         ...eventsByDate[timeObject.date],
-            //                     ];
-            //                     setEventsByDate(eventsByDate);
-            //                 }
-            //             }
-            //         },
-            //     },
-            // ]);
+            setCreateModalVisible(true);
         }, []);
 
-    const [setCreateModalVisible, createModal] = useAgendaCreateModal();
     return (
         <View style={{ flex: 1 }}>
-            {createModal}
+            {createModalVisible && (
+                <AgendaCreateModal
+                    visible={true}
+                    onClose={() => setCreateModalVisible(false)}
+                    newAgendaStartTimeString={newAgendaStartTimeString}
+                />
+            )}
             <CalendarProvider
                 date={currentDate}
                 onDateChanged={onDateChanged}

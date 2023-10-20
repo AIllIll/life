@@ -12,7 +12,7 @@ import {
     View,
 } from 'react-native';
 
-export interface FullScreenModalExtraProps {
+interface FullScreenModalExtraProps {
     leftButtonProps?: TouchableWithoutFeedbackProps & { text: string };
     rightButtonProps?: TouchableWithoutFeedbackProps & { text: string };
 }
