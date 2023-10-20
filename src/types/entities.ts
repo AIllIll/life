@@ -15,7 +15,7 @@ export interface AgendaEvent {
     title: string;
     startTimestamp: number;
     endTimestamp: number;
-    content: string;
+    summary: string;
     memo: string;
     completed: boolean;
     batchId?: string; // mark a batch of agenda, so it can be delete or update simultaneously
@@ -23,8 +23,7 @@ export interface AgendaEvent {
 
 export type AgendaCreateFormData = {
     title: string;
-    startTimestamp: number;
-    endTimestamp: number;
-    content: string;
+    timeRange: [number, number];
+    summary: string;
     memo: string;
 };

@@ -13,6 +13,6 @@ export const getCalendarDateString = (date: number | Moment) => {
 
 export const getTime = (timestamp: number): string => {
     return moment(timestamp).format(
-        `${CalendarUtils.getCalendarDateString(timestamp)} HH:mm:ss`
+        `${getCalendarDateString(timestamp)} HH:mm:ss`
     );
 };

@@ -1,19 +1,10 @@
 import moment from 'moment';
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import {
-    Alert,
-    Dimensions,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View,
-} from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import DateRangePicker from '@src/components/date-range-picker';
+import FullScreenModal from '@src/components/full-screen-modal';
 import { useAppDispatch } from '@src/hooks';
 import { createOne } from '@src/store/slices/agendas';
 import { AgendaCreateFormData } from '@src/types/entities';
@@ -29,12 +20,11 @@ export const useAgendaCreateModal = (): [
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm({
+    } = useForm<AgendaCreateFormData>({
         defaultValues: {
-            startTimestamp: +moment(),
-            endTimestamp: +moment().add(10, 'minute'),
             title: '',
-            content: '',
+            summary: '',
+            timeRange: [+moment(), +moment().add(10, 'minute')],
             memo: '',
         },
     });
@@ -52,157 +42,114 @@ export const useAgendaCreateModal = (): [
 
     return [
         setVisible,
-        <Modal
-            animationType="slide"
-            // transparent={true}
+        <FullScreenModal
+            leftButtonProps={{
+                onPress: onCancel,
+                text: 'cancel',
+            }}
+            rightButtonProps={{
+                onPress: handleSubmit(onSave),
+                text: ' save ',
+            }}
             visible={visible}
             onRequestClose={() => {
                 Alert.alert('Modal has been closed.');
                 setVisible(!visible);
             }}>
-            <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                <View style={styles.header}>
-                    <TouchableWithoutFeedback
-                        style={styles.headerButton}
-                        onPress={onCancel}>
-                        <Text>cancel</Text>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback
-                        style={styles.headerButton}
-                        onPress={handleSubmit(onSave)}>
-                        <Text style={styles.headerButtonConfirm}> save </Text>
-                    </TouchableWithoutFeedback>
-                </View>
+            <Controller
+                control={control}
+                name="title"
+                rules={{
+                    required: true,
+                    maxLength: 15,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={[styles.formItem, { fontSize: 22 }]}
+                        placeholder="Title"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value as string}
+                    />
+                )}
+            />
+            {errors.title && (
+                <Text style={styles.formHint}>Title is required.</Text>
+            )}
 
-                <View style={styles.body}>
-                    <Controller
-                        control={control}
-                        rules={{
-                            required: true,
-                            maxLength: 15,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                style={styles.formItem}
-                                placeholder="Title"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value as string}
-                            />
-                        )}
-                        name="title"
+            <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.formItem}
+                        placeholder="Summary"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
                     />
-                    {errors.title && (
-                        <Text style={styles.formHint}>This is required.</Text>
-                    )}
-                    <Controller
-                        control={control}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                style={styles.formItem}
-                                placeholder="Summary"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                            />
-                        )}
-                        name="content"
-                    />
-                    {errors.content && (
-                        <Text style={styles.formHint}>This is required.</Text>
-                    )}
+                )}
+                name="summary"
+            />
+            {errors.summary && (
+                <Text style={styles.formHint}>Summary is required.</Text>
+            )}
 
-                    <Controller
-                        control={control}
-                        rules={{
-                            maxLength: 300,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                style={styles.formItem}
-                                multiline
-                                numberOfLines={4}
-                                maxLength={300}
-                                placeholder="Memo"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
+            <Controller
+                control={control}
+                name="timeRange"
+                rules={{
+                    validate: (fieldValue, formValue) => {
+                        console.log(fieldValue, formValue);
+                        return fieldValue[0] < fieldValue[1];
+                    },
+                }}
+                render={({ field: { onChange, value } }) => {
+                    return (
+                        <View style={styles.formItem}>
+                            <DateRangePicker
+                                timeRange={value}
+                                onChange={onChange}
                             />
-                        )}
-                        name="memo"
+                        </View>
+                    );
+                }}
+            />
+            {errors.timeRange && (
+                <Text style={styles.formHint}>Time range is incorrect.</Text>
+            )}
+
+            <Controller
+                control={control}
+                name="memo"
+                rules={{
+                    maxLength: 300,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <TextInput
+                        style={styles.formItem}
+                        multiline
+                        numberOfLines={4}
+                        maxLength={300}
+                        placeholder="Memo"
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
                     />
-                </View>
-            </KeyboardAvoidingView>
-        </Modal>,
+                )}
+            />
+        </FullScreenModal>,
     ];
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        height: Dimensions.get('window').height,
-        padding: 8,
-        // borderWidth: 10,
-    },
-    header: {
-        height: 30,
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        // borderWidth: 1,
-    },
-    headerButton: {
-        // width: ,
-        padding: 4,
-        // borderWidth: 1,
-    },
-    headerButtonConfirm: {
-        color: 'blue',
-    },
-    body: {
-        height: Dimensions.get('window').height - 30 - 20, // no idea why there is an extra 15, might be the status bar
-        width: '100%',
-    },
     formItem: {
         borderBottomWidth: 0.5,
         borderColor: 'grey',
         alignContent: 'flex-start',
+        fontSize: 18,
     },
     formHint: {
         color: 'red',
     },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        width: '80%',
-        display: 'flex',
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-    },
-    buttonOpen: {
-        backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-        backgroundColor: '#2196F3',
-    },
+    formItemDatePicker: {},
 });

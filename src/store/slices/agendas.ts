@@ -58,6 +58,7 @@ const agendasSlice = createSlice({
             .addCase(
                 createOne.fulfilled,
                 (state, action: PayloadAction<AgendaEvent>) => {
+                    console.log('action', action);
                     adapter.addOne(state, action.payload);
                     state.status = 'idle';
                 }
@@ -113,6 +114,7 @@ export const fetchAll = createAsyncThunk(
             ]);
             agendas = agendas.concat(agendasOfOneDate);
         }
+        console.log('agendas', agendas);
         return agendas;
     }
 );
@@ -120,14 +122,16 @@ export const fetchAll = createAsyncThunk(
 export const createOne = createAsyncThunk(
     'agendas/createOne',
     async (one: AgendaCreateFormData) => {
-        const date = moment(one.startTimestamp).format('YYYY-MM-DD');
-        const agendasOfOneDate =
-            (await loadStorage([AsyncStorageKeys.AGENDA, date])) || [];
         const newAgenda: AgendaEvent = {
             ...one,
             id: nanoid(),
             completed: false,
+            startTimestamp: one.timeRange[0],
+            endTimestamp: one.timeRange[1],
         };
+        const date = moment(newAgenda.startTimestamp).format('YYYY-MM-DD');
+        const agendasOfOneDate =
+            (await loadStorage([AsyncStorageKeys.AGENDA, date])) || [];
         agendasOfOneDate.push(newAgenda);
         await saveStorage([AsyncStorageKeys.AGENDA, date], agendasOfOneDate);
         // if it is the first agenda in agendasOfOneDate, the date should be added to datesWithAgenda

@@ -5733,6 +5733,11 @@ react-native-calendars@^1.1301.0:
   optionalDependencies:
     moment "^2.29.4"
 
+react-native-date-picker@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.npmmirror.com/react-native-date-picker/-/react-native-date-picker-4.3.3.tgz#5ca4ca10283538ab9307b7f2dc6b83233ded122b"
+  integrity sha512-Lq2hGZkwoyCMsxi/uw4KVGu4/xdPZ8AHEx2SU5KY2mipHFpX+r4n5/gXa+rpCRkARJaTFYPZ7S59bT9KMh7fGw==
+
 react-native-flash-message@^0.4.2:
   version "0.4.2"
   resolved "https://registry.npmmirror.com/react-native-flash-message/-/react-native-flash-message-0.4.2.tgz"

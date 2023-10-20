@@ -1,10 +1,7 @@
-import { get } from 'lodash';
-import filter from 'lodash/filter';
-import find from 'lodash/find';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { View } from 'react-native';
 import {
     CalendarProvider,
     CalendarUtils,
@@ -14,9 +11,12 @@ import {
     TimelineProps,
 } from 'react-native-calendars';
 
-import { useAppSelector } from '@src/hooks';
-import { selectAgendaDates, selectAgendas } from '@src/store/slices/agendas';
-import { AgendaEvent } from '@src/types/entities';
+import { useAppDispatch, useAppSelector } from '@src/hooks';
+import {
+    fetchAll,
+    selectAgendaDates,
+    selectAgendas,
+} from '@src/store/slices/agendas';
 
 import { getCalendarDateString, getTime } from './helper';
 import { useAgendaCreateModal } from './modals/create';
@@ -45,13 +45,14 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             }
         );
     }, [busyDates]);
+    const dispatch = useAppDispatch();
     const agendas = useAppSelector(selectAgendas);
     const eventsByDate = useMemo(() => {
         const timelineEvents: TimelineEventProps[] = agendas.map(a => ({
             start: getTime(a.startTimestamp),
             end: getTime(a.endTimestamp),
             title: a.title,
-            summary: a.content,
+            summary: a.summary,
             color: '#e6add8',
         }));
         return groupBy(timelineEvents, e =>
@@ -59,6 +60,9 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         );
     }, [agendas]);
 
+    useEffect(() => {
+        dispatch(fetchAll());
+    }, []);
     useEffect(() => {
         // const m = moment();
         // console.log('m', m);
