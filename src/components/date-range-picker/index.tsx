@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
@@ -75,7 +75,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     <Text style={styles.time}>
                         {moment(begin).format('HH:mm:ss')}
                     </Text>
-                    <Text>{moment(begin).format('YYYY-MM-DD dddd')}</Text>
+                    <Text>{moment(begin).format('YYYY-MM-DD')}</Text>
+                    <Text>{moment(begin).format('dddd')}</Text>
                 </TouchableOpacity>
                 <Text>——</Text>
                 <TouchableOpacity
@@ -86,7 +87,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                     <Text style={styles.time}>
                         {moment(end).format('HH:mm:ss')}
                     </Text>
-                    <Text>{moment(end).format('YYYY-MM-DD dddd')}</Text>
+                    <Text>{moment(end).format('YYYY-MM-DD')}</Text>
+                    <Text>{moment(end).format('dddd')}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     rangeWrapper: {
         flexDirection: 'row',
         width: '100%',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         alignItems: 'center',
         padding: 16,
     },
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
     time: {
         fontWeight: 'bold',
         color: 'black',
-        fontSize: 16,
+        fontSize: 18,
+        marginBottom: 4,
     },
 });

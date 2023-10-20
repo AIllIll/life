@@ -102,9 +102,8 @@ export const fetchAll = createAsyncThunk(
     'agendas/fetchAll',
     async (): Promise<AgendaEvent[]> => {
         // read storage of dates that have agenda
-        const datesWithAgenda = await loadStorage(
-            CONST_STORAGE_KEYS.AGENDA_DATES
-        );
+        const datesWithAgenda =
+            (await loadStorage(CONST_STORAGE_KEYS.AGENDA_DATES)) || [];
         // read storage of agenda by date
         let agendas: AgendaEvent[] = [];
         for (const date of datesWithAgenda) {

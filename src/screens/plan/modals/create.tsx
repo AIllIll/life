@@ -65,7 +65,7 @@ export const useAgendaCreateModal = (): [
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={[styles.formItem, { fontSize: 22 }]}
+                        style={[styles.formItem, { fontSize: 28 }]}
                         placeholder="Title"
                         onBlur={onBlur}
                         onChangeText={onChange}

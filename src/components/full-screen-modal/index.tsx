@@ -1,4 +1,4 @@
-import React, { Children, ReactElement } from 'react';
+import React from 'react';
 import {
     Dimensions,
     KeyboardAvoidingView,
@@ -32,13 +32,23 @@ const FullScreenModal: React.FC<FullScreenModalProps> = props => {
                     <TouchableWithoutFeedback
                         {...props.leftButtonProps}
                         style={styles.headerButton}>
-                        <Text>{props.leftButtonProps?.text}</Text>
+                        <Text
+                            style={[
+                                styles.headerButtonText,
+                                styles.headerButtonCancel,
+                            ]}>
+                            {props.leftButtonProps?.text}
+                        </Text>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback
                         style={styles.headerButton}
                         {...props.rightButtonProps}>
-                        <Text style={styles.headerButtonConfirm}>
-                            <Text>{props.rightButtonProps?.text}</Text>
+                        <Text
+                            style={[
+                                styles.headerButtonText,
+                                styles.headerButtonConfirm,
+                            ]}>
+                            {props.rightButtonProps?.text}
                         </Text>
                     </TouchableWithoutFeedback>
                 </View>
@@ -68,8 +78,14 @@ const styles = StyleSheet.create({
     },
     headerButton: {
         // width: ,
-        padding: 4,
-        // borderWidth: 1,
+        padding: 8,
+        borderWidth: 1,
+    },
+    headerButtonText: {
+        fontSize: 20,
+    },
+    headerButtonCancel: {
+        color: 'black',
     },
     headerButtonConfirm: {
         color: '#2196F3',
@@ -77,6 +93,7 @@ const styles = StyleSheet.create({
     body: {
         height: Dimensions.get('window').height - 30 - 20, // no idea why there is an extra 15, might be the status bar
         width: '100%',
+        paddingTop: 24,
     },
 });
 
