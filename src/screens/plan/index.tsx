@@ -11,6 +11,7 @@ import {
     TimelineProps,
 } from 'react-native-calendars';
 
+import { FAB } from '@rneui/themed';
 import { useAppDispatch, useAppSelector } from '@src/hooks';
 import {
     fetchAll,
@@ -111,13 +112,6 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
 
     return (
         <View style={{ flex: 1 }}>
-            {createModalVisible && (
-                <AgendaCreateModal
-                    visible={true}
-                    onClose={() => setCreateModalVisible(false)}
-                    newAgendaStartTimeString={newAgendaStartTimeString}
-                />
-            )}
             <CalendarProvider
                 date={currentDate}
                 onDateChanged={onDateChanged}
@@ -154,6 +148,19 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                     initialTime={INITIAL_TIME}
                 />
             </CalendarProvider>
+            {createModalVisible && (
+                <AgendaCreateModal
+                    visible={true}
+                    onClose={() => setCreateModalVisible(false)}
+                    newAgendaStartTimeString={newAgendaStartTimeString}
+                />
+            )}
+            <FAB
+                loading
+                visible
+                icon={{ name: 'add', color: 'white' }}
+                size="small"
+            />
         </View>
     );
 };
