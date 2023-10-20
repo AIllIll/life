@@ -18,7 +18,7 @@ import { useAppSelector } from '@src/hooks';
 import { selectAgendaDates, selectAgendas } from '@src/store/slices/agendas';
 import { AgendaEvent } from '@src/types/entities';
 
-import { getTime } from './helper';
+import { getCalendarDateString, getTime } from './helper';
 import { useAgendaCreateModal } from './modals/create';
 
 import type { PlanScreenProps } from '@src/types';
@@ -33,13 +33,13 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     const marked = useMemo(() => {
         return busyDates.reduce(
             (m: { [key: string]: { marked: boolean } }, cur: string) => {
-                m[CalendarUtils.getCalendarDateString(+moment(cur))] = {
+                m[getCalendarDateString(+moment(cur))] = {
                     marked: true,
                 };
                 return m;
             },
             {
-                [CalendarUtils.getCalendarDateString(+moment())]: {
+                [getCalendarDateString(+moment())]: {
                     marked: true,
                 },
             }
@@ -60,6 +60,16 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     }, [agendas]);
 
     useEffect(() => {
+        // const m = moment();
+        // console.log('m', m);
+        // console.log(CalendarUtils.getCalendarDateString(+m));
+        // m.add(-1, 'h');
+        // console.log('m', m);
+        // console.log(
+        //     CalendarUtils.getCalendarDateString(
+        //         +m.add(moment().utcOffset(), 'minute')
+        //     )
+        // );
         console.log('marked', marked);
     }, [marked]);
 

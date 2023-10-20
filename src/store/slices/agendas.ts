@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {
     createAsyncThunk,
     createEntityAdapter,
@@ -17,7 +19,7 @@ import {
 import { RootState } from '../';
 import { isPendingAction, isRejectedAction } from './';
 
-import type { AgendaEvent } from '@src/types/entities';
+import type { AgendaCreateFormData, AgendaEvent } from '@src/types/entities';
 /**
  * the interface of AgendasState
  */
@@ -117,29 +119,32 @@ export const fetchAll = createAsyncThunk(
 
 export const createOne = createAsyncThunk(
     'agendas/createOne',
-    async (one: AgendaEvent) => {
-        one.id = nanoid();
-        const date = one.startDate;
+    async (one: AgendaCreateFormData) => {
+        const date = moment(one.startTimestamp).format('YYYY-MM-DD');
         const agendasOfOneDate =
             (await loadStorage([AsyncStorageKeys.AGENDA, date])) || [];
-        agendasOfOneDate.push(one);
+        const newAgenda: AgendaEvent = {
+            ...one,
+            id: nanoid(),
+            completed: false,
+        };
+        agendasOfOneDate.push(newAgenda);
         await saveStorage([AsyncStorageKeys.AGENDA, date], agendasOfOneDate);
         // if it is the first agenda in agendasOfOneDate, the date should be added to datesWithAgenda
         if (agendasOfOneDate.length == 1) {
-            const datesWithAgenda = await loadStorage(
-                CONST_STORAGE_KEYS.AGENDA_DATES
-            );
+            const datesWithAgenda =
+                (await loadStorage(CONST_STORAGE_KEYS.AGENDA_DATES)) || [];
             datesWithAgenda.push(date);
             await saveStorage(CONST_STORAGE_KEYS.AGENDA_DATES, datesWithAgenda);
         }
-        return one;
+        return newAgenda;
     }
 );
 
 export const deleteOne = createAsyncThunk(
     'agendas/deleteOne',
     async (one: AgendaEvent) => {
-        const date = one.startDate;
+        const date = moment(one.startTimestamp).format('YYYY-MM-DD');
         let agendasOfOneDate =
             (await loadStorage([AsyncStorageKeys.AGENDA, date])) || [];
         agendasOfOneDate = agendasOfOneDate.filter(
@@ -187,9 +192,12 @@ export const agendasReducer = agendasSlice.reducer;
 export const { selectAll: selectAgendas, selectById: selectAgendaById } =
     adapter.getSelectors((state: RootState) => state.agendas);
 export const selectAgendaDates = createSelector(selectAgendas, items =>
-    items.map(item => item.startDate)
+    items.map(item => moment(item.startTimestamp).format('YYYY-MM-DD'))
 );
 export const selectAgendaByDate = createSelector(
     [selectAgendas, (_, date) => date],
-    (items, date) => items.filter(item => item.startDate == date)
+    (items, date) =>
+        items.filter(
+            item => moment(item.startTimestamp).format('YYYY-MM-DD') == date
+        )
 );
