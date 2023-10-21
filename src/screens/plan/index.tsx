@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import {
     CalendarProvider,
     CalendarUtils,
@@ -26,9 +26,12 @@ import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
 
 const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
+    const dispatch = useAppDispatch();
+
     const [currentDate, setCurrentDate] = useState(
         getCalendarDateString(+moment())
     );
+    const [FABLoading, setFABLoading] = useState(false);
 
     const busyDates = useAppSelector(selectAgendaDates);
     const marked = useMemo(() => {
@@ -46,7 +49,6 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             }
         );
     }, [busyDates]);
-    const dispatch = useAppDispatch();
     const agendas = useAppSelector(selectAgendas);
     const eventsByDate = useMemo(() => {
         const timelineEvents: TimelineEventProps[] = agendas.map(a => ({
@@ -111,7 +113,14 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         }, []);
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
+            {createModalVisible && (
+                <AgendaCreateModal
+                    visible={true}
+                    onClose={() => setCreateModalVisible(false)}
+                    newAgendaStartTimeString={newAgendaStartTimeString}
+                />
+            )}
             <CalendarProvider
                 date={currentDate}
                 onDateChanged={onDateChanged}
@@ -121,6 +130,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                 // numberOfDays={3}
             >
                 <ExpandableCalendar
+                    style={styles.calendar}
                     firstDay={1}
                     // leftArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/previous.png')}
                     // rightArrowImageSource={require('../test/react-native-calendar-screen/example/src/img/next.png')}
@@ -148,21 +158,33 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                     initialTime={INITIAL_TIME}
                 />
             </CalendarProvider>
-            {createModalVisible && (
-                <AgendaCreateModal
-                    visible={true}
-                    onClose={() => setCreateModalVisible(false)}
-                    newAgendaStartTimeString={newAgendaStartTimeString}
-                />
-            )}
             <FAB
-                loading
+                loading={FABLoading}
                 visible
+                // icon={{ name: 'chevron-left', color: 'white' }}
                 icon={{ name: 'add', color: 'white' }}
-                size="small"
+                // size="small"
+                placement="right"
+                // style={{ position: 'absolute' }}
+            />
+            <FAB
+                loading={FABLoading}
+                visible
+                icon={{ name: 'undo', color: 'white' }}
+                // size="small"
+                placement="right"
+                style={styles.undoFAB}
             />
         </View>
     );
 };
 
 export default PlanScreen;
+
+const styles = StyleSheet.create({
+    container: { flex: 1 },
+    calendar: {},
+    undoFAB: {
+        marginBottom: 90,
+    },
+});
