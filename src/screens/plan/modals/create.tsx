@@ -8,7 +8,7 @@ import FullScreenModal, {
     FullScreenModalProps,
 } from '@src/components/full-screen-modal';
 import { useAppDispatch } from '@src/hooks';
-import { createOne } from '@src/store/slices/agendas';
+import { createAgenda } from '@src/store/slices/agendas';
 import { AgendaCreateFormData } from '@src/types/entities';
 
 export interface AgendaCreateModalExtraProps {
@@ -50,7 +50,8 @@ const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
             ...data,
             completed: false,
         };
-        dispatch(createOne(agenda)).then(() => onClose());
+        console.log('agenda', agenda);
+        dispatch(createAgenda(agenda)).then(() => onClose());
     };
 
     return (

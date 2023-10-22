@@ -98,7 +98,7 @@ const agendasSlice = createSlice({
 /**
  * Thunks Actions
  */
-export const fetchAll = createAsyncThunk(
+const fetchAll = createAsyncThunk(
     'agendas/fetchAll',
     async (): Promise<AgendaEvent[]> => {
         // read storage of dates that have agenda
@@ -118,7 +118,7 @@ export const fetchAll = createAsyncThunk(
     }
 );
 
-export const createOne = createAsyncThunk(
+const createOne = createAsyncThunk(
     'agendas/createOne',
     async (one: AgendaCreateFormData) => {
         const newAgenda: AgendaEvent = {
@@ -128,6 +128,7 @@ export const createOne = createAsyncThunk(
             startTimestamp: one.timeRange[0],
             endTimestamp: one.timeRange[1],
         };
+        console.log('newAgenda', newAgenda);
         const date = moment(newAgenda.startTimestamp).format('YYYY-MM-DD');
         const agendasOfOneDate =
             (await loadStorage([AsyncStorageKeys.AGENDA, date])) || [];
@@ -144,7 +145,7 @@ export const createOne = createAsyncThunk(
     }
 );
 
-export const deleteOne = createAsyncThunk(
+const deleteOne = createAsyncThunk(
     'agendas/deleteOne',
     async (one: AgendaEvent) => {
         const date = moment(one.startTimestamp).format('YYYY-MM-DD');
@@ -179,7 +180,11 @@ export const deleteOne = createAsyncThunk(
 //         return item;
 //     }
 // );
-
+export {
+    deleteOne as deleteAgenda,
+    createOne as createAgenda,
+    fetchAll as fetchAllAgendas,
+};
 /**
  * Redux Actions
  */

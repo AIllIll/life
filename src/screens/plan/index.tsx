@@ -1,7 +1,15 @@
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import {
+    Alert,
+    Button,
+    Dimensions,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 import {
     CalendarProvider,
     CalendarUtils,
@@ -12,9 +20,12 @@ import {
 } from 'react-native-calendars';
 
 import { FAB } from '@rneui/themed';
+import FullScreenModal from '@src/components/full-screen-modal';
 import { useAppDispatch, useAppSelector } from '@src/hooks';
 import {
-    fetchAll,
+    deleteAgenda,
+    fetchAllAgendas,
+    selectAgendaById,
     selectAgendaDates,
     selectAgendas,
 } from '@src/store/slices/agendas';
@@ -31,7 +42,14 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     const [currentDate, setCurrentDate] = useState(
         getCalendarDateString(+moment())
     );
-    const [FABLoading, setFABLoading] = useState(false);
+    const [FABLoading, setFABLoading] = useState<boolean>(false);
+    const [selectedAgendaId, setSelectedAgendaId] = useState<
+        string | undefined | null
+    >(null);
+    const [createModalVisible, setCreateModalVisible] =
+        useState<boolean>(false);
+    const [updateModalVisible, setUpdateModalVisible] =
+        useState<boolean>(false);
 
     const busyDates = useAppSelector(selectAgendaDates);
     const marked = useMemo(() => {
@@ -49,9 +67,11 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             }
         );
     }, [busyDates]);
+
     const agendas = useAppSelector(selectAgendas);
     const eventsByDate = useMemo(() => {
         const timelineEvents: TimelineEventProps[] = agendas.map(a => ({
+            id: a.id,
             start: getTime(a.startTimestamp),
             end: getTime(a.endTimestamp),
             title: a.title,
@@ -63,16 +83,18 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         );
     }, [agendas]);
 
+    const selectedAgenda = useAppSelector(
+        state => selectedAgendaId && selectAgendaById(state, selectedAgendaId)
+    );
+
     // 获取所有日程
     useEffect(() => {
-        dispatch(fetchAll());
+        dispatch(fetchAllAgendas());
     }, []);
 
     const [newAgendaStartTimeString, setNewAgendaStartTimeString] = useState(
         moment()
     );
-
-    const [createModalVisible, setCreateModalVisible] = useState(false);
 
     // logs
     useEffect(() => {
@@ -149,8 +171,36 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                             // { start: 0, end: 6 },
                             // { start: 22, end: 24 },
                         ],
-                        overlapEventsSpacing: 8,
-                        rightEdgeSpacing: 24,
+                        overlapEventsSpacing: 4,
+                        rightEdgeSpacing: 60,
+                        // timelineLeftInset: 40,
+                        // numberOfDays: 2,
+                        renderEvent: e => {
+                            return (
+                                <TouchableWithoutFeedback
+                                    disabled={e.id == selectedAgendaId}
+                                    onLongPress={({
+                                        nativeEvent: { locationX, locationY },
+                                    }) => {
+                                        console.log(
+                                            'long press event',
+                                            locationX,
+                                            locationY,
+                                            e.id,
+                                            selectedAgendaId
+                                        );
+                                        setSelectedAgendaId(e.id);
+                                    }}>
+                                    <View style={styles.eventContainer}>
+                                        <View style={styles.eventBody}>
+                                            <Text style={styles.eventBodyTitle}>
+                                                {e.title}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            );
+                        },
                     }}
                     showNowIndicator
                     scrollToNow
@@ -167,14 +217,45 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                 placement="right"
                 // style={{ position: 'absolute' }}
             />
-            <FAB
+            {/* <FAB
                 loading={FABLoading}
                 visible
                 icon={{ name: 'undo', color: 'white' }}
                 // size="small"
                 placement="right"
-                style={styles.undoFAB}
-            />
+                style={styles.FABUndo}
+            /> */}
+
+            <FullScreenModal
+                visible={!!selectedAgendaId}
+                animationType="fade"
+                withoutHeader
+                opacity={0.1}
+                onRequestClose={() => setSelectedAgendaId(null)}
+                onPressBackground={() => setSelectedAgendaId(null)}>
+                <FAB
+                    icon={{ name: 'edit', color: 'white' }}
+                    title={' edit '}
+                    style={[styles.FABEdit]}
+                    onPress={() => {
+                        console.log('press edit');
+                    }}
+                />
+                <FAB
+                    icon={{ name: 'delete', color: 'white' }}
+                    title={'delete'}
+                    style={[styles.FABDelete]}
+                    onPress={() => {
+                        if (selectedAgenda) {
+                            dispatch(deleteAgenda(selectedAgenda)).then(() =>
+                                setSelectedAgendaId(null)
+                            );
+                        } else {
+                            setSelectedAgendaId(null);
+                        }
+                    }}
+                />
+            </FullScreenModal>
         </View>
     );
 };
@@ -184,7 +265,29 @@ export default PlanScreen;
 const styles = StyleSheet.create({
     container: { flex: 1 },
     calendar: {},
-    undoFAB: {
+    FABUndo: {
         marginBottom: 90,
     },
+    FABEdit: {
+        marginTop: '60%',
+        left: Dimensions.get('window').width / 2 - 100,
+    },
+    FABDelete: {
+        marginTop: '30%',
+        left: Dimensions.get('window').width / 2 - 100,
+    },
+    eventContainer: {
+        width: '100%',
+        height: '100%',
+        paddingRight: 4,
+        paddingBottom: 4,
+    },
+    eventBody: {
+        borderColor: 'black',
+        borderWidth: 1,
+        // backgroundColor: 'blue',
+        width: '100%',
+        height: '100%',
+    },
+    eventBodyTitle: {},
 });
