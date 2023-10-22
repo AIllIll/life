@@ -3,7 +3,6 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Alert,
-    Button,
     Dimensions,
     StyleSheet,
     Text,
@@ -20,6 +19,7 @@ import {
 } from 'react-native-calendars';
 
 import { FAB } from '@rneui/themed';
+import FloatingButtonMenu from '@src/components/floating-button-memu';
 import FullScreenModal from '@src/components/full-screen-modal';
 import { useAppDispatch, useAppSelector } from '@src/hooks';
 import {
@@ -42,7 +42,6 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     const [currentDate, setCurrentDate] = useState(
         getCalendarDateString(+moment())
     );
-    const [FABLoading, setFABLoading] = useState<boolean>(false);
     const [selectedAgendaId, setSelectedAgendaId] = useState<
         string | undefined | null
     >(null);
@@ -208,7 +207,38 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                     initialTime={INITIAL_TIME}
                 />
             </CalendarProvider>
-            <FAB
+            <FloatingButtonMenu
+                menuItems={[
+                    {
+                        iconName: 'washing-machine',
+                        color: '#7AF0DB',
+                        onPress: () => console.log('washing-machine'),
+                    },
+                    {
+                        iconName: 'shower-head',
+                        color: '#A5EF7B',
+                        onPress: () => {
+                            console.log('shower-head');
+                        },
+                    },
+                    {
+                        iconName: 'food-takeout-box-outline',
+                        color: '#F0C369',
+                        onPress: () => {
+                            console.log('food-takeout-box-outline');
+                        },
+                    },
+                    {
+                        iconName: 'weight-lifter',
+                        color: '#F09283',
+                        onPress: () => {
+                            console.log('weight-lifter');
+                        },
+                    },
+                ]}
+                color="#1ABCED"
+            />
+            {/* <FAB
                 loading={FABLoading}
                 visible
                 // icon={{ name: 'chevron-left', color: 'white' }}
@@ -216,7 +246,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                 // size="small"
                 placement="right"
                 // style={{ position: 'absolute' }}
-            />
+            /> */}
             {/* <FAB
                 loading={FABLoading}
                 visible
