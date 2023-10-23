@@ -75,7 +75,10 @@ const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                     <TextInput
-                        style={[styles.formItem, { fontSize: 28 }]}
+                        style={[
+                            styles.formItem,
+                            { fontSize: 28, marginTop: 24 },
+                        ]}
                         placeholder="Title"
                         onBlur={onBlur}
                         onChangeText={onChange}

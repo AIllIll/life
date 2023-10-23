@@ -6,11 +6,13 @@ import DatePicker from 'react-native-date-picker';
 import FullScreenModal from '../full-screen-modal';
 
 export interface DateRangePickerProps {
+    disable?: boolean;
     timeRange: [number, number];
-    onChange: (...event: any[]) => void;
+    onChange?: (...event: any[]) => void;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
+    disable = false,
     timeRange,
     onChange,
 }) => {
@@ -35,7 +37,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     return (
         <View>
             <FullScreenModal
-                visible={!!editing}
+                visible={!!editing && !disable}
                 leftButtonProps={{
                     text: 'cancel',
                     onPress: () => {
@@ -45,12 +47,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
                 rightButtonProps={{
                     text: 'save',
                     onPress: () => {
-                        onChange(
-                            (editing == 'begin'
-                                ? [editingDate, end]
-                                : [begin, editingDate]
-                            ).map(t => +moment(t))
-                        );
+                        onChange &&
+                            onChange(
+                                (editing == 'begin'
+                                    ? [editingDate, end]
+                                    : [begin, editingDate]
+                                ).map(t => +moment(t))
+                            );
                         setEditing(false);
                     },
                 }}>

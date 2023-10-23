@@ -2,7 +2,6 @@ import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-    Alert,
     Dimensions,
     StyleSheet,
     Text,
@@ -18,16 +17,11 @@ import {
     TimelineProps,
 } from 'react-native-calendars';
 
-import notifee, { TriggerType } from '@notifee/react-native';
-import { FAB } from '@rneui/themed';
 import FloatingButtonMenu from '@src/components/floating-button-memu';
-import FullScreenModal from '@src/components/full-screen-modal';
 import { useAppDispatch, useAppSelector } from '@src/hooks';
-import { notificationChannelIds } from '@src/notifications/channels';
 import { initiateWorkOutProtocols } from '@src/notifications/presets/work-out';
 import {
     createAgenda,
-    deleteAgenda,
     fetchAllAgendas,
     selectAgendaById,
     selectAgendaDates,
@@ -36,6 +30,7 @@ import {
 
 import { getCalendarDateString, getTime } from './helper';
 import AgendaCreateModal from './modals/create';
+import AgendaDetailModal from './modals/detail';
 
 import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -46,9 +41,9 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
     const [currentDate, setCurrentDate] = useState(
         getCalendarDateString(+moment())
     );
-    const [selectedAgendaId, setSelectedAgendaId] = useState<
-        string | undefined | null
-    >(null);
+    const [selectedAgendaId, setSelectedAgendaId] = useState<string | null>(
+        null
+    );
     const [createModalVisible, setCreateModalVisible] =
         useState<boolean>(false);
     const [updateModalVisible, setUpdateModalVisible] =
@@ -192,7 +187,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                                             e.id,
                                             selectedAgendaId
                                         );
-                                        setSelectedAgendaId(e.id);
+                                        e.id && setSelectedAgendaId(e.id);
                                     }}>
                                     <View style={styles.eventContainer}>
                                         <View style={styles.eventBody}>
@@ -273,8 +268,11 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                 placement="right"
                 style={styles.FABUndo}
             /> */}
-
-            <FullScreenModal
+            <AgendaDetailModal
+                onClose={() => setSelectedAgendaId(null)}
+                agendaId={selectedAgendaId}
+            />
+            {/* <FullScreenModal
                 visible={!!selectedAgendaId}
                 animationType="fade"
                 withoutHeader
@@ -303,7 +301,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                         }
                     }}
                 />
-            </FullScreenModal>
+            </FullScreenModal> */}
         </View>
     );
 };

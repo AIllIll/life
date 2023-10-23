@@ -1,4 +1,3 @@
-import { isUndefined } from 'lodash';
 import React from 'react';
 import {
     Dimensions,
@@ -30,7 +29,7 @@ const FullScreenModal: React.FC<FullScreenModalProps> = props => {
                 style={[
                     styles.container,
                     props.opacity != undefined && {
-                        backgroundColor: `rgba(0,0,0,${props.opacity})`,
+                        backgroundColor: `rgba(255,255,255,${props.opacity})`,
                     },
                 ]}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -60,9 +59,13 @@ const FullScreenModal: React.FC<FullScreenModalProps> = props => {
                         </TouchableWithoutFeedback>
                     </View>
                 )}
-                <TouchableWithoutFeedback onPress={props.onPressBackground}>
+                {!!props.onPressBackground ? (
+                    <TouchableWithoutFeedback onPress={props.onPressBackground}>
+                        <View style={[styles.body]}>{props.children}</View>
+                    </TouchableWithoutFeedback>
+                ) : (
                     <View style={[styles.body]}>{props.children}</View>
-                </TouchableWithoutFeedback>
+                )}
             </KeyboardAvoidingView>
         </Modal>
     );
@@ -105,7 +108,6 @@ const styles = StyleSheet.create({
         flex: 1,
         // height: Dimensions.get('window').height - 30 - 20, // no idea why there is an extra 15, might be the status bar
         width: '100%',
-        paddingTop: 24,
         // borderWidth: 1,
     },
 });
