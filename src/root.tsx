@@ -10,12 +10,17 @@ import HomeTab from '@src/tabs/home-tab';
 import PlanTab from '@src/tabs/plan-tab';
 import ProfileTab from '@src/tabs/profile-tab';
 
+import { prepareNotificationChannels } from './notifications/channels';
 import store from './store';
 
 import type { TabsParamList } from './types';
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 const Root = (): JSX.Element => {
+    useEffect(() => {
+        // todo trigger a initial thunk
+        prepareNotificationChannels();
+    }, []);
     return (
         <Provider store={store}>
             <View style={{ flex: 1 }}>

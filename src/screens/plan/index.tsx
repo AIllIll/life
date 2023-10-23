@@ -18,11 +18,15 @@ import {
     TimelineProps,
 } from 'react-native-calendars';
 
+import notifee, { TriggerType } from '@notifee/react-native';
 import { FAB } from '@rneui/themed';
 import FloatingButtonMenu from '@src/components/floating-button-memu';
 import FullScreenModal from '@src/components/full-screen-modal';
 import { useAppDispatch, useAppSelector } from '@src/hooks';
+import { notificationChannelIds } from '@src/notifications/channels';
+import { initiateWorkOutProtocols } from '@src/notifications/presets/work-out';
 import {
+    createAgenda,
     deleteAgenda,
     fetchAllAgendas,
     selectAgendaById,
@@ -231,8 +235,22 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                     {
                         iconName: 'weight-lifter',
                         color: '#F09283',
-                        onPress: () => {
+                        onPress: async () => {
                             console.log('weight-lifter');
+                            let m = moment().add(10, 'second');
+                            await dispatch(
+                                createAgenda({
+                                    title: 'plank',
+                                    timeRange: [
+                                        +m,
+                                        +moment(m).add(5, 'minute'),
+                                    ],
+                                    summary: '',
+                                    memo: '',
+                                })
+                            );
+                            // Create a trigger notification
+                            await initiateWorkOutProtocols(+m);
                         },
                     },
                 ]}

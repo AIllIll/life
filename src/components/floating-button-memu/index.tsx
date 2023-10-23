@@ -63,45 +63,43 @@ const FloatingButtonMenu: React.FC<FloatingButtonMenu> = ({
                     width: maxIconSize,
                 },
             ]}>
-            {menuItems
-                .reverse()
-                .map(
-                    (
-                        {
-                            iconName = 'question',
-                            iconSize = 56,
-                            fontSize = 24,
-                            color = '#5390D9',
-                            onPress,
-                        },
-                        key
-                    ) => (
-                        <Animated.View
-                            key={key}
+            {menuItems.map(
+                (
+                    {
+                        iconName = 'question',
+                        iconSize = 56,
+                        fontSize = 24,
+                        color = '#5390D9',
+                        onPress,
+                    },
+                    key
+                ) => (
+                    <Animated.View
+                        key={key}
+                        style={[
+                            styles.menuItem,
+                            {
+                                marginBottom: slideAnimation,
+                                width: maxIconSize + 16,
+                            },
+                        ]}>
+                        <Icon
+                            name={iconName}
                             style={[
-                                styles.menuItem,
+                                styles.icon,
                                 {
-                                    marginBottom: slideAnimation,
-                                    width: maxIconSize + 16,
+                                    position: 'absolute',
+                                    fontSize,
+                                    width: iconSize,
+                                    borderRadius: iconSize / 2,
+                                    backgroundColor: color,
                                 },
-                            ]}>
-                            <Icon
-                                name={iconName}
-                                style={[
-                                    styles.icon,
-                                    {
-                                        position: 'absolute',
-                                        fontSize,
-                                        width: iconSize,
-                                        borderRadius: iconSize / 2,
-                                        backgroundColor: color,
-                                    },
-                                ]}
-                                onPress={onPress}
-                            />
-                        </Animated.View>
-                    )
-                )}
+                            ]}
+                            onPress={onPress}
+                        />
+                    </Animated.View>
+                )
+            )}
 
             <Icon
                 name={toggled ? 'arrow-collapse-down' : 'arrow-expand-up'}

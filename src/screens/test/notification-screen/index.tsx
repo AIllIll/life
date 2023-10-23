@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Alert,
     Button,
@@ -36,6 +36,16 @@ const NotificationScreen = ({
     const [delayInputModalVisible, setDelayInputModalVisible] =
         useState<boolean>(false);
     const [triggerDelay, setTriggerDelay] = useState<number>(10);
+
+    const [notificationList, setNotificationList] = useState<any[]>([]);
+    const refreshNotifications = useCallback(async () => {
+        const res = await notifee.getTriggerNotifications();
+        console.log(res);
+        setNotificationList(res);
+    }, []);
+    useEffect(() => {
+        refreshNotifications();
+    }, [refreshNotifications]);
 
     const prepare = async (): Promise<string> => {
         const res = await notifee.requestPermission();
@@ -209,12 +219,29 @@ const NotificationScreen = ({
             <Button
                 title="cancel all notifications"
                 color={'red'}
-                onPress={() => notifee.cancelAllNotifications()}
+                onPress={() => {
+                    notifee.cancelAllNotifications();
+                    refreshNotifications();
+                }}
             />
             <Button
                 title="openNotificationSettings"
                 onPress={() => notifee.openNotificationSettings()}
             />
+            <Button
+                title="refreshNotifications"
+                onPress={() => refreshNotifications()}
+            />
+            <View>
+                {notificationList.map((n, i) => (
+                    <Text key={i}>
+                        {moment(n['trigger']['timestamp']).format(
+                            'YYYY-MM-DD HH:mm:ss'
+                        )}
+                        ,{n['notification']['title']}
+                    </Text>
+                ))}
+            </View>
 
             <Modal
                 animationType="slide"
