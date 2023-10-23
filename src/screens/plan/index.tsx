@@ -173,32 +173,35 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                         rightEdgeSpacing: 60,
                         // timelineLeftInset: 40,
                         // numberOfDays: 2,
-                        renderEvent: e => {
-                            return (
-                                <TouchableWithoutFeedback
-                                    disabled={e.id == selectedAgendaId}
-                                    onLongPress={({
-                                        nativeEvent: { locationX, locationY },
-                                    }) => {
-                                        console.log(
-                                            'long press event',
-                                            locationX,
-                                            locationY,
-                                            e.id,
-                                            selectedAgendaId
-                                        );
-                                        e.id && setSelectedAgendaId(e.id);
-                                    }}>
-                                    <View style={styles.eventContainer}>
-                                        <View style={styles.eventBody}>
-                                            <Text style={styles.eventBodyTitle}>
-                                                {e.title}
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </TouchableWithoutFeedback>
-                            );
+                        onEventPress: e => {
+                            e.id && setSelectedAgendaId(e.id);
                         },
+                        // renderEvent: e => {
+                        //     return (
+                        //         <TouchableWithoutFeedback
+                        //             disabled={e.id == selectedAgendaId}
+                        //             onLongPress={({
+                        //                 nativeEvent: { locationX, locationY },
+                        //             }) => {
+                        //                 console.log(
+                        //                     'long press event',
+                        //                     locationX,
+                        //                     locationY,
+                        //                     e.id,
+                        //                     selectedAgendaId
+                        //                 );
+                        //                 e.id && setSelectedAgendaId(e.id);
+                        //             }}>
+                        //             <View style={styles.eventContainer}>
+                        //                 <View style={styles.eventBody}>
+                        //                     <Text style={styles.eventBodyTitle}>
+                        //                         {e.title}
+                        //                     </Text>
+                        //                 </View>
+                        //             </View>
+                        //         </TouchableWithoutFeedback>
+                        //     );
+                        // },
                     }}
                     showNowIndicator
                     scrollToNow
@@ -251,57 +254,10 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                 ]}
                 color="#1ABCED"
             />
-            {/* <FAB
-                loading={FABLoading}
-                visible
-                // icon={{ name: 'chevron-left', color: 'white' }}
-                icon={{ name: 'add', color: 'white' }}
-                // size="small"
-                placement="right"
-                // style={{ position: 'absolute' }}
-            /> */}
-            {/* <FAB
-                loading={FABLoading}
-                visible
-                icon={{ name: 'undo', color: 'white' }}
-                // size="small"
-                placement="right"
-                style={styles.FABUndo}
-            /> */}
             <AgendaDetailModal
                 onClose={() => setSelectedAgendaId(null)}
                 agendaId={selectedAgendaId}
             />
-            {/* <FullScreenModal
-                visible={!!selectedAgendaId}
-                animationType="fade"
-                withoutHeader
-                opacity={0.1}
-                onRequestClose={() => setSelectedAgendaId(null)}
-                onPressBackground={() => setSelectedAgendaId(null)}>
-                <FAB
-                    icon={{ name: 'edit', color: 'white' }}
-                    title={' edit '}
-                    style={[styles.FABEdit]}
-                    onPress={() => {
-                        console.log('press edit');
-                    }}
-                />
-                <FAB
-                    icon={{ name: 'delete', color: 'white' }}
-                    title={'delete'}
-                    style={[styles.FABDelete]}
-                    onPress={() => {
-                        if (selectedAgenda) {
-                            dispatch(deleteAgenda(selectedAgenda)).then(() =>
-                                setSelectedAgendaId(null)
-                            );
-                        } else {
-                            setSelectedAgendaId(null);
-                        }
-                    }}
-                />
-            </FullScreenModal> */}
         </View>
     );
 };

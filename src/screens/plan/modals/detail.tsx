@@ -29,8 +29,9 @@ const AgendaDetailModal: React.FC<AgendaCreateModalProps> = ({
     agendaId,
 }) => {
     const dispatch = useAppDispatch();
-    const agenda =
-        agendaId && useAppSelector(state => selectAgendaById(state, agendaId));
+    const agenda = useAppSelector(
+        state => agendaId && selectAgendaById(state, agendaId)
+    );
 
     const onEdit = () => {
         console.log('edit');
