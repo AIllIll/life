@@ -90,7 +90,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
         dispatch(fetchAllAgendas());
     }, []);
 
-    const [newAgendaStartTimeString, setNewAgendaStartTimeString] = useState(
+    const [newAgendaStartTimeMoment, setNewAgendaStartTimeMoment] = useState(
         moment()
     );
 
@@ -121,7 +121,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             console.log('onBackgroundLongPress');
             console.log('timeString', timeString);
             console.log('timeObject', timeObject);
-            setNewAgendaStartTimeString(moment(timeString));
+            setNewAgendaStartTimeMoment(moment(timeString));
         }, []);
 
     const onBackgroundLongPressOut: TimelineProps['onBackgroundLongPressOut'] =
@@ -134,13 +134,11 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
 
     return (
         <View style={styles.container}>
-            {createModalVisible && (
-                <AgendaCreateModal
-                    visible={true}
-                    onClose={() => setCreateModalVisible(false)}
-                    newAgendaStartTimeString={newAgendaStartTimeString}
-                />
-            )}
+            <AgendaCreateModal
+                visible={createModalVisible}
+                onClose={() => setCreateModalVisible(false)}
+                newAgendaStartTimeMoment={newAgendaStartTimeMoment}
+            />
             <CalendarProvider
                 date={currentDate}
                 onDateChanged={onDateChanged}

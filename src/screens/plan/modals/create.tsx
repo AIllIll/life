@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -14,7 +14,7 @@ import { AgendaCreateFormData } from '@src/types/entities';
 export interface AgendaCreateModalExtraProps {
     visible: boolean;
     onClose: Function;
-    newAgendaStartTimeString: Moment;
+    newAgendaStartTimeMoment: Moment;
 }
 export type AgendaCreateModalProps = AgendaCreateModalExtraProps &
     FullScreenModalProps;
@@ -22,7 +22,7 @@ export type AgendaCreateModalProps = AgendaCreateModalExtraProps &
 const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
     visible,
     onClose,
-    newAgendaStartTimeString,
+    newAgendaStartTimeMoment,
 }) => {
     const dispatch = useAppDispatch();
 
@@ -32,15 +32,13 @@ const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
     const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = useForm<AgendaCreateFormData>({
         defaultValues: {
             title: '',
             summary: '',
-            timeRange: [
-                +moment(newAgendaStartTimeString),
-                +moment(newAgendaStartTimeString).add(60, 'minute'),
-            ],
+            timeRange: [+moment(), +moment().add(60, 'minute')],
             memo: '',
         },
     });
@@ -53,6 +51,13 @@ const AgendaCreateModal: React.FC<AgendaCreateModalProps> = ({
         console.log('agenda', agenda);
         dispatch(createAgenda(agenda)).then(() => onClose());
     };
+
+    useEffect(() => {
+        setValue('timeRange', [
+            +newAgendaStartTimeMoment,
+            +newAgendaStartTimeMoment.add(1, 'hour'),
+        ]);
+    }, [newAgendaStartTimeMoment]);
 
     return (
         <FullScreenModal
