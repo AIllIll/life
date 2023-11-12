@@ -31,6 +31,7 @@ import {
 import { getCalendarDateString, getTime } from './helper';
 import AgendaCreateModal from './modals/create';
 import AgendaDetailModal from './modals/detail';
+import { presetEventTypeConfig } from './preset-events';
 
 import type { PlanScreenProps } from '@src/types';
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -132,6 +133,36 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
             setCreateModalVisible(true);
         }, []);
 
+    const menu = [
+        ...presetEventTypeConfig.map(c => ({
+            ...c,
+            key: c.type,
+            onPress: () => {
+                console.log();
+            },
+        })),
+        {
+            key: 'workOut',
+            type: 'workOut',
+            iconName: 'weight-lifter',
+            color: '#F09283',
+            onPress: async () => {
+                console.log('weight-lifter');
+                let m = moment().add(10, 'second');
+                await dispatch(
+                    createAgenda({
+                        title: 'plank',
+                        timeRange: [+m, +moment(m).add(5, 'minute')],
+                        summary: '',
+                        memo: '',
+                    })
+                );
+                // Create a trigger notification
+                await initiateWorkOutProtocols(+m);
+            },
+        },
+    ];
+
     return (
         <View style={styles.container}>
             <AgendaCreateModal
@@ -207,51 +238,7 @@ const PlanScreen = ({ navigation, route }: PlanScreenProps): JSX.Element => {
                     initialTime={INITIAL_TIME}
                 />
             </CalendarProvider>
-            <FloatingButtonMenu
-                menuItems={[
-                    {
-                        iconName: 'washing-machine',
-                        color: '#7AF0DB',
-                        onPress: () => console.log('washing-machine'),
-                    },
-                    {
-                        iconName: 'shower-head',
-                        color: '#A5EF7B',
-                        onPress: () => {
-                            console.log('shower-head');
-                        },
-                    },
-                    {
-                        iconName: 'food-takeout-box-outline',
-                        color: '#F0C369',
-                        onPress: () => {
-                            console.log('food-takeout-box-outline');
-                        },
-                    },
-                    {
-                        iconName: 'weight-lifter',
-                        color: '#F09283',
-                        onPress: async () => {
-                            console.log('weight-lifter');
-                            let m = moment().add(10, 'second');
-                            await dispatch(
-                                createAgenda({
-                                    title: 'plank',
-                                    timeRange: [
-                                        +m,
-                                        +moment(m).add(5, 'minute'),
-                                    ],
-                                    summary: '',
-                                    memo: '',
-                                })
-                            );
-                            // Create a trigger notification
-                            await initiateWorkOutProtocols(+m);
-                        },
-                    },
-                ]}
-                color="#1ABCED"
-            />
+            <FloatingButtonMenu menuItems={menu} color="#1ABCED" />
             <AgendaDetailModal
                 onClose={() => setSelectedAgendaId(null)}
                 agendaId={selectedAgendaId}

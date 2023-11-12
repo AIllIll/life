@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export interface MenuItemIconProps {
+    key: string;
     iconName?: string;
     iconSize?: number;
     fontSize?: number;
@@ -22,7 +23,7 @@ export interface MenuItem extends MenuItemIconProps {
     onPress: (event: GestureResponderEvent) => void;
 }
 export interface FloatingButtonMenu
-    extends Omit<MenuItemIconProps, 'iconName'> {
+    extends Omit<MenuItemIconProps, 'iconName' | 'key'> {
     menuItems: MenuItem[];
 }
 
@@ -37,52 +38,112 @@ const FloatingButtonMenu: React.FC<FloatingButtonMenu> = ({
         iconSize
     );
 
-    const slideAnimation = useRef(new Animated.Value(0)).current;
-    const [toggled, setToggled] = useState<boolean>(false);
+    const verticalExpandAnimation = useRef(new Animated.Value(0)).current;
+    const horizontalExpandAnimation = useRef(new Animated.Value(0)).current;
+    const [menuToggled, setMenuToggled] = useState<boolean>(false);
+    const [subMenuToggled, setSubMenuToggled] = useState<boolean>(false);
+    const [expandedMenuItemKey, setExpandedMenuItemKey] = useState<
+        string | null
+    >(null);
     const onToggleMenu = useCallback(
         (open: boolean) => {
-            // console.log('open', open);
-            Animated.timing(slideAnimation, {
+            Animated.timing(verticalExpandAnimation, {
                 toValue: open ? maxIconSize + 8 : 0,
                 duration: 100,
                 useNativeDriver: false,
             }).start();
         },
-        [slideAnimation]
+        [verticalExpandAnimation]
+    );
+    const onToggleSubMenu = useCallback(
+        (open: boolean) => {
+            Animated.timing(horizontalExpandAnimation, {
+                toValue: open ? maxIconSize + 8 : 0,
+                duration: 100,
+                useNativeDriver: false,
+            }).start();
+        },
+        [horizontalExpandAnimation]
     );
     useEffect(() => {
-        console.log('toggled', toggled);
-        onToggleMenu(toggled);
-    }, [toggled]);
+        console.log('toggled', menuToggled);
+        onToggleMenu(menuToggled);
+        if (!menuToggled) {
+            onToggleSubMenu(false);
+        }
+    }, [menuToggled]);
+    useEffect(() => {
+        console.log('subMenuToggled', subMenuToggled);
+        onToggleSubMenu(subMenuToggled);
+    }, [subMenuToggled]);
 
     return (
         <View
             style={[
                 styles.container,
                 {
-                    width: maxIconSize,
+                    width: maxIconSize + 2,
                 },
             ]}>
             {menuItems.map(
-                (
-                    {
-                        iconName = 'question',
-                        iconSize = 56,
-                        fontSize = 24,
-                        color = '#5390D9',
-                        onPress,
-                    },
-                    key
-                ) => (
+                ({
+                    key,
+                    iconName = 'question',
+                    iconSize = 56,
+                    fontSize = 24,
+                    color = '#5390D9',
+                    onPress,
+                }) => (
                     <Animated.View
                         key={key}
                         style={[
                             styles.menuItem,
                             {
-                                marginBottom: slideAnimation,
+                                marginBottom: verticalExpandAnimation,
                                 width: maxIconSize + 16,
                             },
                         ]}>
+                        {expandedMenuItemKey == key && (
+                            <View style={[styles.subMenu]}>
+                                {menuItems.map(
+                                    ({
+                                        key: subkey,
+                                        iconName = 'question',
+                                        iconSize = 56,
+                                        fontSize = 24,
+                                        color = '#5390D9',
+                                        onPress,
+                                    }) => (
+                                        <Animated.View
+                                            key={`${key}-${subkey}`}
+                                            style={[
+                                                styles.subMenuItem,
+                                                {
+                                                    position: 'relative',
+                                                    right: horizontalExpandAnimation,
+                                                    width: maxIconSize + 16,
+                                                },
+                                            ]}>
+                                            <Icon
+                                                name={iconName}
+                                                style={[
+                                                    styles.icon,
+                                                    {
+                                                        // position: 'absolute',
+                                                        fontSize,
+                                                        width: iconSize,
+                                                        borderRadius:
+                                                            iconSize / 2,
+                                                        backgroundColor: color,
+                                                    },
+                                                ]}
+                                                onPress={onPress}
+                                            />
+                                        </Animated.View>
+                                    )
+                                )}
+                            </View>
+                        )}
                         <Icon
                             name={iconName}
                             style={[
@@ -95,14 +156,19 @@ const FloatingButtonMenu: React.FC<FloatingButtonMenu> = ({
                                     backgroundColor: color,
                                 },
                             ]}
-                            onPress={onPress}
+                            onPress={e => {
+                                onPress(e);
+                                console.log(key);
+                                setExpandedMenuItemKey(key);
+                                setSubMenuToggled(!subMenuToggled);
+                            }}
                         />
                     </Animated.View>
                 )
             )}
 
             <Icon
-                name={toggled ? 'arrow-collapse-down' : 'arrow-expand-up'}
+                name={menuToggled ? 'arrow-collapse-down' : 'arrow-expand-up'}
                 style={[
                     styles.icon,
                     {
@@ -112,7 +178,7 @@ const FloatingButtonMenu: React.FC<FloatingButtonMenu> = ({
                         backgroundColor: color,
                     },
                 ]}
-                onPress={() => setToggled(!toggled)}
+                onPress={() => setMenuToggled(!menuToggled)}
             />
         </View>
     );
@@ -125,9 +191,21 @@ const styles = StyleSheet.create({
         bottom: 16,
         right: 16,
         backgroundColor: 'rgba(0,0,0,0)',
-        // borderWidth: 1,
+        paddingTop: 1,
+        paddingBottom: 1,
+        borderWidth: 1,
+        zIndex: 99,
     },
     menuItem: {
+        backgroundColor: 'rgba(0,0,0,0)',
+    },
+    subMenu: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        right: 0,
+        position: 'absolute',
+        borderWidth: 1,
+    },
+    subMenuItem: {
         backgroundColor: 'rgba(0,0,0,0)',
     },
     icon: {
